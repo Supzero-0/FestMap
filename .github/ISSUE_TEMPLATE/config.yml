@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/Supzero-0/FestMap#readme
+    about: Lis la doc avant de créer une issue
