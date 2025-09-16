@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FestmapApplication<festmap>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.project.festmap.FestmapApplication",
+            "projectName": "festmap",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
