@@ -1,14 +1,14 @@
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
   {
-    files: ["**/*.ts"],
+    files: ['**/*.ts'],
     languageOptions: { parser: tsParser },
-    plugins: { "@typescript-eslint": tseslint },
+    plugins: { '@typescript-eslint': tseslint },
     rules: {
-      "@typescript-eslint/no-unused-vars": ["warn"],
-      "no-console": ["warn", { allow: ["warn", "error"] }]
-    }
-  }
+      '@typescript-eslint/no-unused-vars': ['warn'],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
 ];
