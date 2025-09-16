@@ -1,3 +1,11 @@
+---
+name: "🐞 Bug Report"
+about: Signaler un bug ou un comportement inattendu
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+---
+
 ## 🐛 Problème
 Description claire du bug
 

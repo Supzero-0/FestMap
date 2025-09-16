@@ -1,3 +1,11 @@
+---
+name: "✨ Feature Request"
+about: Proposer une nouvelle fonctionnalité ou amélioration
+title: "[FEAT] "
+labels: ["enhancement"]
+assignees: []
+---
+
 # 🚀 [Titre de la fonctionnalité]
 
 ## 📝 Résumé
