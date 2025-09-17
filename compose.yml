@@ -17,5 +17,22 @@ services:
       timeout: 3s
       retries: 10
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: FestMapAPI
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB_NAME}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SERVER_PORT: ${API_PORT}
+    ports:
+      - "${API_PORT}:8080"
+    restart: unless-stopped
+
 volumes:
   db-data:
