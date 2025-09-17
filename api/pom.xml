@@ -92,6 +92,53 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<!-- Formatage auto, comme Prettier -->
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.43.0</version>
+				<configuration>
+					<java>
+						<googleJavaFormat version="1.17.0"/>
+					</java>
+				</configuration>
+				<executions>
+					<execution>
+						<goals><goal>check</goal></goals>
+						<phase>verify</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Linter, comme ESLint -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.4.0</version>
+				<dependencies>
+					<!-- Règles Google officielles -->
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>10.17.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<!-- Utilise la config Google fournie par Checkstyle -->
+					<configLocation>google_checks.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals><goal>check</goal></goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
