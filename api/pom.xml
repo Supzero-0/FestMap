@@ -101,6 +101,10 @@
 				<configuration>
 					<java>
 						<googleJavaFormat version="1.17.0"/>
+						<removeUnusedImports/>
+						<importOrder>
+							<order>java,javax,org,com</order>
+						</importOrder>
 					</java>
 				</configuration>
 				<executions>
