@@ -46,13 +46,20 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      target: dev
     container_name: FestMapClient
+    working_dir: /app
     environment:
       - NG_CLI_ANALYTICS=false
     ports:
-      - "${CLIENT_PORT}:80"
+      - "${CLIENT_PORT}:4200"
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules
     depends_on:
       - api
+    command: ["sh","-lc","npm ci && npx ng serve --host=0.0.0.0 --port=4200"]
 
 volumes:
   db-data:
+  client_node_modules:
