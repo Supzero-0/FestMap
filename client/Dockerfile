@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
 ENV CHOKIDAR_USEPOLLING=true
 ENV CHOKIDAR_INTERVAL=300
-CMD ["sh","-lc","npm run start --host=0.0.0.0 --port=4200"]
+CMD ["sh","-lc","npm run start --host=0.0.0.0 --port=4200 --proxy-config src/proxy.conf.json"]
 
 # --- Build stage ---
 FROM node:22-alpine AS builder
