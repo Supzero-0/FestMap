@@ -9,6 +9,8 @@ spring:
         url: ${DB_URL:jdbc:postgresql://${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}}
         username: ${DB_USERNAME:${POSTGRES_USER}}
         password: ${DB_PASSWORD:${POSTGRES_PASSWORD}}
+        hikari:
+            initialization-fail-timeout: -1
     jpa:
         hibernate:
             ddl-auto: update
@@ -19,6 +21,8 @@ spring:
 
 logging:
     level:
+        '[com.zaxxer.hikari]': INFO
+        '[net.ttddyy.dsproxy]': INFO
         org:
             springframework:
                 jdbc:

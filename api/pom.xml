@@ -64,6 +64,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.ttddyy</groupId>
+			<artifactId>datasource-proxy</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -99,6 +104,7 @@
 				<artifactId>spotless-maven-plugin</artifactId>
 				<version>2.43.0</version>
 				<configuration>
+					<encoding>UTF-8</encoding>
 					<java>
 						<googleJavaFormat version="1.17.0"/>
 						<removeUnusedImports/>
@@ -109,8 +115,11 @@
 				</configuration>
 				<executions>
 					<execution>
-						<goals><goal>check</goal></goals>
-						<phase>verify</phase>
+						<id>spotless-apply-before-compile</id>
+						<phase>process-sources</phase>
+						<goals>
+						<goal>apply</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

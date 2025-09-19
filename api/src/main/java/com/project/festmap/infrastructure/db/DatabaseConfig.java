@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
+
 @Configuration
 public class DatabaseConfig {
 
@@ -29,6 +31,12 @@ public class DatabaseConfig {
     cfg.setInitializationFailTimeout(-1);
     cfg.setKeepaliveTime(60_000);
     cfg.setConnectionTestQuery("SELECT 1");
-    return new HikariDataSource(cfg);
+    DataSource ds = new HikariDataSource(cfg);
+    return ProxyDataSourceBuilder.create(ds)
+        .name("festmap-ds")
+        .multiline()
+        .countQuery()
+        .logQueryBySlf4j()
+        .build();
   }
 }
