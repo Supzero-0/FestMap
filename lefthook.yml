@@ -1,0 +1,60 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint-front:
+      root: client
+      run: npm run lint --max-warnings=0
+      fail_text: "❌ ESLint a trouvé des erreurs dans le code front (src/). Corrige avant de commit."
+    prettier-front:
+      root: client
+      run: npm run format:check
+      fail_text: "❌ Prettier: formatage invalide dans le front. Lance `npm run format` pour corriger."
+
+    lint-back:
+      root: api
+      run: ./mvnw checkstyle:check
+      fail_text: "❌ Checkstyle a échoué côté backend. Corrige le style Java."
+    format-back:
+      root: api
+      run: ./mvnw spotless:check
+      fail_text: "❌ Spotless a détecté du code mal formaté côté backend. Lance `./mvnw spotless:apply`."
+
+
+#
+# pre-push:
+#   jobs:
+#     - name: packages audit
+#       tags:
+#         - frontend
+#         - security
+#       run: yarn audit
+#
+#     - name: gems audit
+#       tags:
+#         - backend
+#         - security
+#       run: bundle audit
+#
+# pre-commit:
+#   parallel: true
+#   jobs:
+#     - run: yarn eslint {staged_files}
+#       glob: "*.{js,ts,jsx,tsx}"
+#
+#     - name: rubocop
+#       glob: "*.rb"
+#       exclude:
+#         - config/application.rb
+#         - config/routes.rb
+#       run: bundle exec rubocop --force-exclusion {all_files}
+#
+#     - name: govet
+#       files: git ls-files -m
+#       glob: "*.go"
+#       run: go vet {files}
+#
+#     - script: "hello.js"
+#       runner: node
+#
+#     - script: "hello.go"
+#       runner: go run
