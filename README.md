@@ -9,9 +9,16 @@ Architecture : **Spring Boot 3 (Java 21) + Angular 17 + PostgreSQL 16**.
 ```
 hello-api/
 ├── api/ # Backend (Spring Boot)
+│   ├── Dockerfile
+│   └── src/
 ├── client/ # Frontend (Angular)
+│   ├── Dockerfile
+│   └── src/
 ├── .github/ # Templates issues/PR
-│ └── ISSUE_TEMPLATE/
+│   ├── ISSUE_TEMPLATE/
+│   └── pull_request_template.md
+├── .lefthook.yml      # Hooks Git (lint/format/test)
+├── compose.yml        # Docker Compose multi-services
 ├── .env.example # Variables d’environnement
 └── README.md
 ```
@@ -21,7 +28,7 @@ hello-api/
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (v4+)  
 - [Docker Compose](https://docs.docker.com/compose/) v2  
 - (Optionnel) Java 21 + Node 20 si tu veux lancer hors Docker  
-
+- (Optionnel) Lefthook installé localement pour profiter des hooks Git
 
 ## ▶️ Démarrage rapide
 1. Clone le repo :
@@ -69,8 +76,10 @@ Erreur :
 - Karma/Jasmine (tests unitaires)
 
 ### Git hooks
-- Vérification lint/format avant commit
-- Exécution des tests avant push
+- pre-commit → lint + format check (front & back)
+- commit-msg → vérifie le format du message (Commitlint, Conventional Commits)
+- pre-push → exécute les tests unitaires
+- post-commit → notifications (optionnel)
 
 ## 🔄 Intégration continue (CI)
 
@@ -88,6 +97,8 @@ GitHub Actions vérifie automatiquement :
     - ✨ Feature request : .github/ISSUE_TEMPLATE/feature_request.md
 - Pull requests :
     - .github/pull_request_template.md
+- Conventions de commit :
+    - Format : feat:, fix:, chore:, refactor:, etc. (Conventional Commits)
 
 ## 🧹 Commandes utiles
 
@@ -103,6 +114,9 @@ docker compose down
 
 # Reset complet (y compris DB)
 docker compose down -v
+
+# Hooks Lefthook (manuel)
+npx lefthook run pre-commit
 ```
 
 ## 📜 Licence

@@ -19,42 +19,23 @@ pre-commit:
       run: ./mvnw spotless:check
       fail_text: "❌ Spotless a détecté du code mal formaté côté backend. Lance `./mvnw spotless:apply`."
 
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
+
+post-commit:
+  commands:
+    celebrate:
+      run: echo "🎉 Bravo ! Ton commit est enregistré."
 
 #
 # pre-push:
-#   jobs:
-#     - name: packages audit
-#       tags:
-#         - frontend
-#         - security
-#       run: yarn audit
+#   commands:
+#     test-front:
+#       root: client
+#       run: npm test
+#     test-front:
+#       root: api
+#       run: ./mvnw test
 #
-#     - name: gems audit
-#       tags:
-#         - backend
-#         - security
-#       run: bundle audit
-#
-# pre-commit:
-#   parallel: true
-#   jobs:
-#     - run: yarn eslint {staged_files}
-#       glob: "*.{js,ts,jsx,tsx}"
-#
-#     - name: rubocop
-#       glob: "*.rb"
-#       exclude:
-#         - config/application.rb
-#         - config/routes.rb
-#       run: bundle exec rubocop --force-exclusion {all_files}
-#
-#     - name: govet
-#       files: git ls-files -m
-#       glob: "*.go"
-#       run: go vet {files}
-#
-#     - script: "hello.js"
-#       runner: node
-#
-#     - script: "hello.go"
-#       runner: go run
