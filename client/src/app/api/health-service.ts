@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { catchError, finalize, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HealthService {
   private _loading = signal(false);
@@ -21,20 +21,21 @@ export class HealthService {
     this._result.set(null);
     this._error.set(null);
 
-    return this.http.get<any>('/api/health')
+    return this.http
+      .get<any>('/api/health')
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           this._error.set(`Erreur API: ${error.message || error.status}`);
           return of(null);
         }),
-        finalize(() => this._loading.set(false))
+        finalize(() => this._loading.set(false)),
       )
       .subscribe({
         next: (data) => {
           if (data) {
             this._result.set(data);
           }
-        }
+        },
       });
   }
 }
