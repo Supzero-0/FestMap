@@ -1,13 +1,13 @@
 # 🚀 FestMap (Java + Angular + Postgres)
 
 FestMap est une application Micro-SaaS permettant de découvrir, filtrer et planifier les festivals musicaux autour de soi grâce à une carte interactive et personnalisée.
-Architecture : **Spring Boot 3 (Java 21) + Angular 17 + PostgreSQL 16**.
+Architecture : **Spring Boot 3 (Java 21) + Angular 20 + PostgreSQL 16**.
 
 
 ## 📂 Structure du projet
 
 ```
-hello-api/
+FestMap/
 ├── api/ # Backend (Spring Boot)
 │   ├── Dockerfile
 │   └── src/
@@ -33,8 +33,8 @@ hello-api/
 ## ▶️ Démarrage rapide
 1. Clone le repo :
    ```bash
-   git clone https://github.com/ton-org/hello-api.git
-   cd hello-api
+   git clone https://github.com/Supzero-0/FestMap
+   cd FestMap
     ```
 
 2. Configure tes variables :
