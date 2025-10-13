@@ -1,5 +1,7 @@
 # 🚀 FestMap (Java + Angular + Postgres)
 
+[![CI - main](https://github.com/Supzero-0/FestMap/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Supzero-0/FestMap/actions/workflows/ci.yml)
+
 FestMap est une application Micro-SaaS permettant de découvrir, filtrer et planifier les festivals musicaux autour de soi grâce à une carte interactive et personnalisée.
 Architecture : **Spring Boot 3 (Java 21) + Angular 20 + PostgreSQL 16**.
 
