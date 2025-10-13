@@ -1,12 +1,12 @@
 # --- Dev stage ---
-FROM maven:eclipse-temurin AS dev
+FROM maven:3.9-eclipse-temurin-21-alpine AS dev
 WORKDIR /app
 COPY pom.xml .
 RUN --mount=type=cache,target=/root/.m2 mvn -q -e -DskipTests dependency:go-offline
 CMD ["sh", "-lc", "mvn -q -Dspring-boot.run.profiles=${SPRING_PROFILES_ACTIVE:-dev} spring-boot:run"]
 
 # --- Build stage ---
-FROM maven:eclipse-temurin AS builder
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 WORKDIR /app
 COPY pom.xml .
 RUN --mount=type=cache,target=/root/.m2 mvn -q -e -DskipTests dependency:go-offline
