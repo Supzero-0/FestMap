@@ -1,5 +1,8 @@
 <aside data-testid="festival-list">
   <ul>
-    <li data-testid="festival-list-empty">Aucun festival</li>
+    <li *ngFor="let f of festivals">
+      {{ f.name }} - {{ f.city }}
+      <small>({{ f.genre }})</small>
+    </li>
   </ul>
 </aside>
