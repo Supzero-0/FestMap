@@ -1,0 +1,56 @@
+[
+    {
+        "id": "vieilles-charrues",
+        "name": "Les Vieilles Charrues",
+        "city": "Carhaix-Plouguer",
+        "lat": 48.275,
+        "lng": -3.575,
+        "date": "2026-07-17",
+        "genre": "Pop/Rock"
+    },
+    {
+        "id": "rock-en-seine",
+        "name": "Rock en Seine",
+        "city": "Saint-Cloud (Paris)",
+        "lat": 48.845,
+        "lng": 2.222,
+        "date": "2026-08-22",
+        "genre": "Rock/Indé"
+    },
+    {
+        "id": "garorock",
+        "name": "Garorock",
+        "city": "Marmande",
+        "lat": 44.503,
+        "lng": 0.163,
+        "date": "2026-06-27",
+        "genre": "Multi"
+    },
+    {
+        "id": "eurockeennes",
+        "name": "Les Eurockéennes",
+        "city": "Belfort",
+        "lat": 47.669,
+        "lng": 6.852,
+        "date": "2026-07-05",
+        "genre": "Rock"
+    },
+    {
+        "id": "hellfest",
+        "name": "Hellfest",
+        "city": "Clisson",
+        "lat": 47.087,
+        "lng": -1.283,
+        "date": "2026-06-21",
+        "genre": "Metal"
+    },
+    {
+        "id": "nuits-sonores",
+        "name": "Nuits Sonores",
+        "city": "Lyon",
+        "lat": 45.757,
+        "lng": 4.835,
+        "date": "2026-05-25",
+        "genre": "Electro"
+    }
+]
