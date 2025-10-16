@@ -1,8 +1,30 @@
 <aside data-testid="festival-list">
-  <ul>
-    <li *ngFor="let f of festivals">
-      {{ f.name }} - {{ f.city }}
-      <small>({{ f.genre }})</small>
-    </li>
-  </ul>
+  <h2>Liste des festivals</h2>
+
+  <ng-container *ngIf="vm$ | async as vm">
+    <!-- Error -->
+    <p *ngIf="vm.error; else ok" role="alert" aria-live="polite">
+      {{ vm.error }}
+    </p>
+
+    <!-- Ok -->
+    <ng-template #ok>
+      <!-- Loading -->
+      <p *ngIf="vm.loading; else dataTpl" aria-busy="true">Chargement...</p>
+
+      <!-- Data -->
+      <ng-template #dataTpl>
+        <ul *ngIf="vm.data.length; else empty" aria-busy="false">
+          <li *ngFor="let f of vm.data; trackBy: trackById" data-testid="festival-list-item">
+            {{ f.name }} — {{ f.city }}
+            <small>({{ f.genre }})</small>
+          </li>
+        </ul>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #empty>
+      <p data-testid="festival-list-empty">Aucun festival</p>
+    </ng-template>
+  </ng-container>
 </aside>
