@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Festival {
-  id: string;
+  id: number;
   name: string;
   city: string;
   lat: number;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Festival, FESTIVAL_API } from '../../types';
 import { catchError, map, of, startWith } from 'rxjs';
 
@@ -18,6 +18,8 @@ type Vm = {
 export class FestivalList {
   private readonly api = inject(FESTIVAL_API);
 
+  @Output() selectFestival = new EventEmitter<number>();
+
   readonly vm$ = this.api.getAll$().pipe(
     map((data) => ({ data, loading: false, error: null }) as Vm),
     startWith({ data: [], loading: true, error: null } as Vm),
@@ -28,4 +30,8 @@ export class FestivalList {
   );
 
   trackById = (_: number, f: Festival) => f.id;
+
+  onSelect(id: number) {
+    this.selectFestival.emit(id);
+  }
 }

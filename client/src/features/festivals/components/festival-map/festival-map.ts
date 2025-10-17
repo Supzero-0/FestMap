@@ -28,6 +28,7 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
   private map!: L.Map;
   private markersGroup = L.featureGroup();
+  private markersById = new Map<number, L.Marker>();
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -61,6 +62,7 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
   private renderMarkers(festivals: Festival[]): void {
     this.markersGroup.clearLayers();
+    this.markersById.clear();
 
     // Création des marqueurs
     festivals?.forEach((f) => {
@@ -78,6 +80,7 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
       });
 
       this.markersGroup.addLayer(marker);
+      this.markersById.set(f.id, marker);
     });
 
     const count = (this.markersGroup.getLayers() || []).length;
@@ -86,9 +89,24 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     }
   }
 
+  // Recentre la map et ouvre la popup du marqueur correspondant
+  focusMarker(id: number) {
+    // Récupération du marker et des coordonnées
+    const marker = this.markersById.get(id);
+    if (!marker) return;
+    const ll = marker.getLatLng();
+    // Gestion de l'animation et du zoom
+    this.map.stop();
+    const targetZoom = Math.max(this.map.getZoom(), 9);
+    this.map.flyTo(ll, targetZoom, { animate: true, duration: 0.4, easeLinearity: 0.25 });
+    // Affichage de la pop-up
+    marker.openPopup();
+  }
+
   ngOnDestroy(): void {
     try {
       if (this.map) {
+        this.markersGroup.clearLayers();
         this.map.off();
         this.map.remove();
       }
