@@ -3,14 +3,10 @@ import * as L from 'leaflet';
 import { Festival, FESTIVAL_API } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
 const DefaultIcon = L.icon({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  iconRetinaUrl: 'leaflet/marker-icon-2x.png',
+  iconUrl: 'leaflet/marker-icon.png',
+  shadowUrl: 'leaflet/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
