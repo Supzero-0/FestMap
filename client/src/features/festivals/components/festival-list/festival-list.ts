@@ -34,4 +34,8 @@ export class FestivalList {
   onSelect(id: number) {
     this.selectFestival.emit(id);
   }
+
+  onDelete(id: number) {
+    this.api.delete$(id);
+  }
 }

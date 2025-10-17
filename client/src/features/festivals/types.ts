@@ -13,6 +13,7 @@ export interface Festival {
 
 export interface FestivalApi {
   getAll$(): Observable<Festival[]>;
+  delete$(id: number): Observable<void>;
 }
 
 export const FESTIVAL_API = new InjectionToken<FestivalApi>('FESTIVAL_API');
