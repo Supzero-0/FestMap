@@ -1,0 +1,11 @@
+#festivalMap {
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  #festivalMap {
+    height: 350px;
+  }
+}
