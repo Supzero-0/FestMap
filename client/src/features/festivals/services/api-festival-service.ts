@@ -14,4 +14,8 @@ export class ApiFestivalService implements FestivalApi {
   getAll$(): Observable<Festival[]> {
     return this.http.get<Festival[]>(this.baseUrl);
   }
+
+  delete$(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }

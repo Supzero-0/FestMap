@@ -28,6 +28,7 @@
             <strong>{{ f.name }}</strong>
             <span class="city">{{ f.city }}</span>
             <small>({{ f.genre }})</small>
+            <button (click)="onDelete(f.id)">Supprimer</button>
           </li>
         </ul>
       </ng-template>
