@@ -1,6 +1,6 @@
 [
     {
-        "id": "vieilles-charrues",
+        "id": 1,
         "name": "Les Vieilles Charrues",
         "city": "Carhaix-Plouguer",
         "lat": 48.275,
@@ -9,7 +9,7 @@
         "genre": "Pop/Rock"
     },
     {
-        "id": "rock-en-seine",
+        "id": 2,
         "name": "Rock en Seine",
         "city": "Saint-Cloud (Paris)",
         "lat": 48.845,
@@ -18,7 +18,7 @@
         "genre": "Rock/Indé"
     },
     {
-        "id": "garorock",
+        "id": 3,
         "name": "Garorock",
         "city": "Marmande",
         "lat": 44.503,
@@ -27,7 +27,7 @@
         "genre": "Multi"
     },
     {
-        "id": "eurockeennes",
+        "id": 4,
         "name": "Les Eurockéennes",
         "city": "Belfort",
         "lat": 47.669,
@@ -36,7 +36,7 @@
         "genre": "Rock"
     },
     {
-        "id": "hellfest",
+        "id": 5,
         "name": "Hellfest",
         "city": "Clisson",
         "lat": 47.087,
@@ -45,7 +45,7 @@
         "genre": "Metal"
     },
     {
-        "id": "nuits-sonores",
+        "id": 6,
         "name": "Nuits Sonores",
         "city": "Lyon",
         "lat": 45.757,

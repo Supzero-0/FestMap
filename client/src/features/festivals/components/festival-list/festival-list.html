@@ -1,4 +1,4 @@
-<aside data-testid="festival-list">
+<aside class="list" data-testid="festival-list">
   <h2>Liste des festivals</h2>
 
   <ng-container *ngIf="vm$ | async as vm">
@@ -10,13 +10,23 @@
     <!-- Ok -->
     <ng-template #ok>
       <!-- Loading -->
-      <p *ngIf="vm.loading; else dataTpl" aria-busy="true">Chargement...</p>
+      <p *ngIf="vm.loading; else dataTpl" class="loading" aria-busy="true">Chargement...</p>
 
       <!-- Data -->
       <ng-template #dataTpl>
         <ul *ngIf="vm.data.length; else empty" aria-busy="false">
-          <li *ngFor="let f of vm.data; trackBy: trackById" data-testid="festival-list-item">
-            {{ f.name }} — {{ f.city }}
+          <li
+            *ngFor="let f of vm.data; trackBy: trackById"
+            class="item"
+            role="button"
+            tabindex="0"
+            (click)="onSelect(f.id)"
+            (keyup.enter)="onSelect(f.id)"
+            data-testid="festival-list-item"
+            [attr.aria-label]="`Sélectionner ` + f.name + ` à ` + f.city"
+          >
+            <strong>{{ f.name }}</strong>
+            <span class="city">{{ f.city }}</span>
             <small>({{ f.genre }})</small>
           </li>
         </ul>

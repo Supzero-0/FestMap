@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FestivalMap } from '../../../features/festivals/components/festival-map/festival-map';
 import { FestivalList } from '../../../features/festivals/components/festival-list/festival-list';
 
@@ -9,4 +9,10 @@ import { FestivalList } from '../../../features/festivals/components/festival-li
   templateUrl: './map-page.html',
   styleUrl: './map-page.scss',
 })
-export class MapPage {}
+export class MapPage {
+  @ViewChild(FestivalMap) mapCmp!: FestivalMap;
+
+  onSelectFestival(id: number) {
+    this.mapCmp?.focusMarker(id);
+  }
+}
