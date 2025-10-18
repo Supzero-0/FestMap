@@ -22,13 +22,18 @@
             tabindex="0"
             (click)="onSelect(f.id)"
             (keyup.enter)="onSelect(f.id)"
-            data-testid="festival-list-item"
+            [attr.data-testid]="`festival-list-item-` + f.id"
             [attr.aria-label]="`Sélectionner ` + f.name + ` à ` + f.city"
           >
             <strong>{{ f.name }}</strong>
             <span class="city">{{ f.city }}</span>
             <small>({{ f.genre }})</small>
-            <button (click)="onDelete(f.id)">Supprimer</button>
+            <button
+              (click)="onDelete(f.id)"
+              [attr.data-testid]="`delete-festival-list-item-` + f.id"
+            >
+              Supprimer
+            </button>
           </li>
         </ul>
       </ng-template>

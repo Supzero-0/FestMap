@@ -64,20 +64,26 @@ jobs:
       - name: Build
         run: npm run build -- --configuration=production
 
-      - name: Install Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+      # - name: Install Chrome
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y wget gnupg
+      #     wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      #     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+      #     sudo apt-get update
+      #     sudo apt-get install -y google-chrome-stable
 
-#      - name: Test
-#        env:
-#          CI: true
-#          CHROME_BIN: /usr/bin/google-chrome
-#        run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
+      # - name: Test
+      #   env:
+      #     CI: true
+      #     CHROME_BIN: /usr/bin/google-chrome
+      #   run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        run: npm run e2e
 
   docker:
     name: Docker images
