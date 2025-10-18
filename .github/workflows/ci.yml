@@ -79,6 +79,12 @@ jobs:
       #     CHROME_BIN: /usr/bin/google-chrome
       #   run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('client/package-lock.json') }}
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
