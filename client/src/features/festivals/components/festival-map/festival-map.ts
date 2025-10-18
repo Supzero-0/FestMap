@@ -71,7 +71,12 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
       const marker = L.marker([f.lat, f.lng], {
         title: f.name,
         alt: f.name,
-      }).bindPopup(`<strong>${f.name}</strong><br>${f.city}`);
+      }).bindPopup(`
+        <section data-testid="festival-popup-${f.id}">
+          <strong>${f.name}</strong>
+          <br>${f.city}
+        </section>
+      `);
 
       // Attribution d'un data-testid
       marker.on('add', () => {
