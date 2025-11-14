@@ -1,2 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'tailwindcss';
+@use 'tailwindcss';
+
+:root {
+  --fest-font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --fest-font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fest-font-body);
+  background-color: #1e1457; // Bleu profond
+  color: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fest-font-heading);
+}
