@@ -1,0 +1,108 @@
+/* ================================
+   🎨 Variables de thème FestMap
+   ================================ */
+
+:root {
+  /* Couleurs principales */
+  --fest-violet: #3b1fb7;
+  --fest-orange: #ff7b36;
+  --fest-violet-soft: #a45bff;
+
+  /* Mappage vers les tokens PrimeNG de base */
+  --primary-color: var(--fest-violet);
+  --primary-color-text: #ffffff;
+}
+
+/* ================================
+   🧩 PrimeNG : overrides généraux
+   ================================ */
+
+/* Polices globales PrimeNG */
+.p-component {
+  font-family: var(--fest-font-body);
+}
+
+/* Boutons principaux */
+.p-button {
+  border-radius: 999px; // look “pill”
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+}
+
+.p-button.p-button-primary,
+.p-button:not(.p-button-text):not(.p-button-outlined) {
+  background: var(--fest-violet);
+  border-color: var(--fest-violet);
+  color: #ffffff;
+
+  &:hover {
+    background: var(--fest-violet-soft);
+    border-color: var(--fest-violet-soft);
+  }
+}
+
+/* Boutons secondaires (ex: p-button-outlined) */
+.p-button.p-button-outlined {
+  color: var(--fest-orange);
+  border-color: var(--fest-orange);
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(255, 123, 54, 0.12);
+  }
+}
+
+/* Inputs (p-inputtext) */
+.p-inputtext {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(15, 10, 40, 0.9);
+  color: #ffffff;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:enabled:focus {
+    border-color: var(--fest-orange);
+    box-shadow: 0 0 0 1px var(--fest-orange);
+  }
+}
+
+/* Labels */
+.p-inputgroup-addon,
+.p-float-label > label,
+.p-dropdown-label {
+  font-family: var(--fest-font-body);
+}
+
+/* Dropdown & Panel */
+.p-dropdown,
+.p-multiselect {
+  border-radius: 0.75rem;
+  background-color: rgba(15, 10, 40, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+/* Badges / Chips pour filtres */
+.p-chip {
+  border-radius: 999px;
+  background-color: var(--fest-violet-soft);
+  color: #1e1457;
+  font-weight: 500;
+}
+
+/* Cards (si tu utilises p-card pour les festivals) */
+.p-card {
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(59, 31, 183, 0.92), rgba(164, 91, 255, 0.9));
+  border: 1px solid rgba(255, 216, 111, 0.35);
+  color: #ffffff;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Petits accents (focus, sélection, etc.) */
+.p-focus {
+  outline-color: var(--fest-orange);
+}

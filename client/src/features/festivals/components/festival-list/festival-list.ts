@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Festival, FESTIVAL_API } from '../../types';
 import { catchError, map, of, startWith } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 
 type Vm = {
   data: Festival[];
@@ -11,7 +12,8 @@ type Vm = {
 
 @Component({
   selector: 'app-festival-list',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, ButtonModule],
   templateUrl: './festival-list.html',
   styleUrl: './festival-list.scss',
 })

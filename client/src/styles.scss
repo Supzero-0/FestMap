@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+
+@config "../tailwind.config.ts";
+
+:root {
+  --fest-font-heading: 'Orbitron', system-ui, -apple-system, sans-serif;
+  --fest-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fest-font-body);
+  color: #ffffff;
+  letter-spacing: 0.08em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fest-font-heading);
+}
