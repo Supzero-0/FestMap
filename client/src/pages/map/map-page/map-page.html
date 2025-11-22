@@ -1,11 +1,92 @@
-<main data-testid="map-page">
-  <h1 data-testid="map-title">FestMap — Carte & Festivals</h1>
-  <section class="layout">
-    <section class="map">
-      <app-festival-map />
-    </section>
-    <section class="sidebar">
-      <app-festival-list (selectFestival)="onSelectFestival($event)" />
-    </section>
+<main
+  data-testid="map-page"
+  class="h-screen grid grid-cols-[260px_minmax(320px,1fr)_2fr] bg-fest-bg text-fest-text font-body"
+>
+  <!-- Colonne 1 : Sidebar -->
+  <aside class="border-r border-fest-border-subtle flex flex-col justify-between p-4">
+    <div>
+      <div class="mb-8">
+        <span class="block font-heading text-xl text-fest-orange tracking-wide"> FestMap </span>
+        <span class="block text-xs text-fest-text/60"> Every festival. On one map. </span>
+      </div>
+
+      <nav class="space-y-2 text-sm">
+        <button
+          class="w-full text-left px-3 py-2 rounded-lg bg-fest-violet-neon text-fest-text hover:bg-fest-magenta transition-colors"
+        >
+          Accueil
+        </button>
+        <button
+          class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
+        >
+          Favoris
+        </button>
+        <button
+          class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
+        >
+          Calendrier
+        </button>
+      </nav>
+    </div>
+
+    <div class="mt-8 pt-4 border-t border-fest-border-subtle flex items-center gap-2">
+      <div class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"></div>
+      <div class="text-xs">
+        <div class="font-semibold">Ton profil</div>
+        <div class="text-fest-text/60">username</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Colonne 2 : Search + Liste -->
+  <section class="border-r border-fest-border-subtle flex flex-col p-4 gap-4 bg-fest-surface">
+    <!-- Barre de recherche -->
+    <div>
+      <label class="block text-xs uppercase tracking-wide text-fest-text/60 mb-1">
+        Rechercher un festival
+      </label>
+      <input
+        type="text"
+        placeholder="Nom, ville, genre..."
+        class="w-full rounded-lg bg-fest-bg border border-fest-border-subtle px-3 py-2 text-sm placeholder:text-fest-text/40 focus:outline-none focus:ring-2 focus:ring-fest-magenta"
+      />
+    </div>
+
+    <!-- Liste des festivals -->
+    <div class="flex-1 overflow-y-auto">
+      <app-festival-list (selectFestival)="onSelectFestival($event)"></app-festival-list>
+    </div>
+  </section>
+
+  <!-- Colonne 3 : Map + filtres -->
+  <section class="flex flex-col p-4 gap-4 bg-fest-bg">
+    <!-- Filtres -->
+    <header class="flex flex-wrap items-center gap-2 justify-between">
+      <h1 class="font-heading text-xl text-fest-orange">Carte des festivals</h1>
+      <div class="flex flex-wrap gap-2 text-xs">
+        <button
+          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
+        >
+          Tous les genres
+        </button>
+        <button
+          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
+        >
+          Ce mois-ci
+        </button>
+        <button
+          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
+        >
+          Budget &lt; 100€
+        </button>
+      </div>
+    </header>
+
+    <!-- Map -->
+    <div
+      class="flex-1 rounded-2xl overflow-hidden bg-fest-surface border border-fest-border-subtle"
+    >
+      <app-festival-map></app-festival-map>
+    </div>
   </section>
 </main>
