@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.festmap.infrastructure.db.DatabaseService;
+import com.project.festmap.service.DatabaseHealthService;
 
 @RestController
 @RequestMapping("/api")
 public class HealthController {
-  private final DatabaseService db;
+  private final DatabaseHealthService db;
 
-  public HealthController(DatabaseService db) {
+  public HealthController(DatabaseHealthService db) {
     this.db = db;
   }
 

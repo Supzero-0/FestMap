@@ -1,13 +1,13 @@
-package com.project.festmap.infrastructure.db;
+package com.project.festmap.service;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DatabaseService {
+public class DatabaseHealthService {
   private final JdbcTemplate jdbc;
 
-  public DatabaseService(JdbcTemplate jdbc) {
+  public DatabaseHealthService(JdbcTemplate jdbc) {
     this.jdbc = jdbc;
   }
 

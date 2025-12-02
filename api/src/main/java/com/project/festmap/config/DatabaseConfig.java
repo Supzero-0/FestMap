@@ -1,4 +1,4 @@
-package com.project.festmap.infrastructure.db;
+package com.project.festmap.config;
 
 import javax.sql.DataSource;
 
