@@ -1,4 +1,4 @@
-package com.project.festmap.api;
+package com.project.festmap.config;
 
 import java.time.Instant;
 import java.util.Map;
