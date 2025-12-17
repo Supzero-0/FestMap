@@ -33,10 +33,10 @@ public class Festival {
 
   @Column private String country;
 
-  @Column(precision = 9, scale = 6)
+  @Column(nullable = false)
   private double latitude;
 
-  @Column(precision = 9, scale = 6)
+  @Column(nullable = false)
   private double longitude;
 
   @Column(name = "start_date")

@@ -10,6 +10,7 @@ import com.project.festmap.festival.domain.FestivalRepository;
 import com.project.festmap.festival.dto.FestivalRequest;
 import com.project.festmap.festival.dto.FestivalResponse;
 import com.project.festmap.festival.mapper.FestivalMapper;
+import com.project.festmap.shared.exception.FestivalNotFoundException;
 
 @Service
 public class FestivalService {
@@ -35,6 +36,9 @@ public class FestivalService {
   }
 
   public void deleteFestival(Long id) {
+    if (!festivalRepository.existsById(id)) {
+      throw new FestivalNotFoundException("Festival with id " + id + " not found.");
+    }
     festivalRepository.deleteById(id);
   }
 }
