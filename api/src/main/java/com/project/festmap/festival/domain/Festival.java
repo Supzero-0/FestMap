@@ -22,16 +22,16 @@ public class Festival {
   @Column(nullable = false)
   private String name;
 
-  private String city;
+  @Column private String city;
 
-  private String description;
+  @Column private String description;
 
-  private String address;
+  @Column private String address;
 
   @Column(name = "postal_code")
   private String postalCode;
 
-  private String country;
+  @Column private String country;
 
   @Column(precision = 9, scale = 6)
   private double latitude;
