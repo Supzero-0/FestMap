@@ -23,6 +23,13 @@ public class FestivalService {
     this.festivalMapper = festivalMapper;
   }
 
+  public FestivalResponse getFestivalById(Long id) {
+    return festivalRepository
+        .findById(id)
+        .map(festivalMapper::toFestivalResponse)
+        .orElseThrow(() -> new FestivalNotFoundException("Festival with id " + id + " not found."));
+  }
+
   public List<FestivalResponse> getAllFestivals() {
     return festivalRepository.findAll().stream()
         .map(festivalMapper::toFestivalResponse)
