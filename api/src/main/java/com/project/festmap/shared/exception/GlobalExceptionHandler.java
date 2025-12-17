@@ -1,4 +1,4 @@
-package com.project.festmap.config;
+package com.project.festmap.shared.exception;
 
 import java.time.Instant;
 import java.util.Map;

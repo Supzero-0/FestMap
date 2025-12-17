@@ -1,15 +1,15 @@
-package com.project.festmap.service;
+package com.project.festmap.festival.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.project.festmap.domain.Festival;
-import com.project.festmap.dto.FestivalRequest;
-import com.project.festmap.dto.FestivalResponse;
-import com.project.festmap.mapper.FestivalMapper;
-import com.project.festmap.repository.FestivalRepository;
+import com.project.festmap.festival.domain.Festival;
+import com.project.festmap.festival.domain.FestivalRepository;
+import com.project.festmap.festival.dto.FestivalRequest;
+import com.project.festmap.festival.dto.FestivalResponse;
+import com.project.festmap.festival.mapper.FestivalMapper;
 
 @Service
 public class FestivalService {

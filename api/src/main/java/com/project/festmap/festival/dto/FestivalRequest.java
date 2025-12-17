@@ -1,31 +1,38 @@
-package com.project.festmap.dto;
+package com.project.festmap.festival.dto;
 
 import java.time.LocalDate;
 
-public class FestivalResponse {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-  private Long id;
+public class FestivalRequest {
+
+  @NotBlank(message = "Le nom est obligatoire")
   private String name;
+
   private String description;
   private String address;
+
+  @NotBlank(message = "La ville est obligatoire")
   private String city;
+
   private String postalCode;
+
+  @NotBlank(message = "Le pays est obligatoire")
   private String country;
+
   private double latitude;
   private double longitude;
+
+  @NotNull(message = "La date de début est obligatoire")
   private LocalDate startDate;
+
+  @NotNull(message = "La date de fin est obligatoire")
   private LocalDate endDate;
+
   private String genre;
 
   // Getters and setters
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public String getName() {
     return name;

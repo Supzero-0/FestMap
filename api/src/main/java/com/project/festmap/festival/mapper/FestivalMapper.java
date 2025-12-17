@@ -1,10 +1,10 @@
-package com.project.festmap.mapper;
+package com.project.festmap.festival.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.project.festmap.domain.Festival;
-import com.project.festmap.dto.FestivalRequest;
-import com.project.festmap.dto.FestivalResponse;
+import com.project.festmap.festival.domain.Festival;
+import com.project.festmap.festival.dto.FestivalRequest;
+import com.project.festmap.festival.dto.FestivalResponse;
 
 @Component
 public class FestivalMapper {

@@ -1,4 +1,4 @@
-package com.project.festmap.domain;
+package com.project.festmap.festival.domain;
 
 import java.time.LocalDate;
 

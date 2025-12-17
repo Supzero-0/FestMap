@@ -1,4 +1,4 @@
-package com.project.festmap.api;
+package com.project.festmap.festival.api;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.festmap.dto.FestivalRequest;
-import com.project.festmap.dto.FestivalResponse;
-import com.project.festmap.service.FestivalService;
+import com.project.festmap.festival.dto.FestivalRequest;
+import com.project.festmap.festival.dto.FestivalResponse;
+import com.project.festmap.festival.service.FestivalService;
 
 import jakarta.validation.Valid;
 

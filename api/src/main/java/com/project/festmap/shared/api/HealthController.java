@@ -1,4 +1,4 @@
-package com.project.festmap.api;
+package com.project.festmap.shared.api;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.festmap.service.DatabaseHealthService;
+import com.project.festmap.shared.service.DatabaseHealthService;
 
 @RestController
 @RequestMapping("/api")
