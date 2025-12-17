@@ -9,8 +9,12 @@ databaseChangeLog:
               - column: { name: id, type: BIGINT, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
               - column: { name: name, type: VARCHAR(255), constraints: { nullable: false } }
               - column: { name: city, type: VARCHAR(255) }
-              - column: { name: lat, type: "DECIMAL(9,6)" }
-              - column: { name: lng, type: "DECIMAL(9,6)" }
+              - column: { name: description, type: "TEXT" }
+              - column: { name: address, type: VARCHAR(255) }
+              - column: { name: postal_code, type: VARCHAR(20) }
+              - column: { name: country, type: VARCHAR(255) }
+              - column: { name: latitude, type: "DECIMAL(9,6)" }
+              - column: { name: longitude, type: "DECIMAL(9,6)" }
               - column: { name: start_date, type: DATE }
               - column: { name: end_date, type: DATE }
               - column: { name: genre, type: VARCHAR(100) }
