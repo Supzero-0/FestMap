@@ -1,6 +1,5 @@
 package com.project.festmap.domain;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -25,11 +24,20 @@ public class Festival {
 
   private String city;
 
-  @Column(precision = 9, scale = 6)
-  private BigDecimal lat;
+  private String description;
+
+  private String address;
+
+  @Column(name = "postal_code")
+  private String postalCode;
+
+  private String country;
 
   @Column(precision = 9, scale = 6)
-  private BigDecimal lng;
+  private double latitude;
+
+  @Column(precision = 9, scale = 6)
+  private double longitude;
 
   @Column(name = "start_date")
   private LocalDate startDate;

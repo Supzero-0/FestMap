@@ -9,8 +9,12 @@ databaseChangeLog:
               - column: { name: id, value: "1" }
               - column: { name: name, value: "Les Vieilles Charrues" }
               - column: { name: city, value: "Carhaix-Plouguer" }
-              - column: { name: lat, value: "48.275" }
-              - column: { name: lng, value: "-3.575" }
+              - column: { name: description, value: "Le plus grand festival de France en plein cœur de la Bretagne." }
+              - column: { name: address, value: "Site de Kerampuil" }
+              - column: { name: postal_code, value: "29270" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "48.275" }
+              - column: { name: longitude, value: "-3.575" }
               - column: { name: start_date, value: "2026-07-17" }
               - column: { name: end_date, value: "2026-07-20" }
               - column: { name: genre, value: "Pop/Rock" }
@@ -20,8 +24,12 @@ databaseChangeLog:
               - column: { name: id, value: "2" }
               - column: { name: name, value: "Rock en Seine" }
               - column: { name: city, value: "Saint-Cloud (Paris)" }
-              - column: { name: lat, value: "48.845" }
-              - column: { name: lng, value: "2.222" }
+              - column: { name: description, value: "Le dernier grand rendez-vous rock de l'été aux portes de Paris." }
+              - column: { name: address, value: "Domaine National de Saint-Cloud" }
+              - column: { name: postal_code, value: "92210" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "48.845" }
+              - column: { name: longitude, value: "2.222" }
               - column: { name: start_date, value: "2026-08-22" }
               - column: { name: end_date, value: "2026-08-25" }
               - column: { name: genre, value: "Rock/Indé" }
@@ -31,8 +39,12 @@ databaseChangeLog:
               - column: { name: id, value: "3" }
               - column: { name: name, value: "Garorock" }
               - column: { name: city, value: "Marmande" }
-              - column: { name: lat, value: "44.503" }
-              - column: { name: lng, value: "0.163" }
+              - column: { name: description, value: "Un des plus anciens festivals du Sud-Ouest, entre rock, électro et pop." }
+              - column: { name: address, value: "Plaine de la Filhole" }
+              - column: { name: postal_code, value: "47200" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "44.503" }
+              - column: { name: longitude, value: "0.163" }
               - column: { name: start_date, value: "2026-06-27" }
               - column: { name: end_date, value: "2026-06-30" }
               - column: { name: genre, value: "Multi" }
@@ -42,8 +54,12 @@ databaseChangeLog:
               - column: { name: id, value: "4" }
               - column: { name: name, value: "Les Eurockéennes" }
               - column: { name: city, value: "Belfort"}
-              - column: { name: lat, value: "47.669" }
-              - column: { name: lng, value: "6.852" }
+              - column: { name: description, value: "Un festival engagé sur une presqu'île, au bord de l'eau." }
+              - column: { name: address, value: "Presqu'île du Malsaucy" }
+              - column: { name: postal_code, value: "90300" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "47.669" }
+              - column: { name: longitude, value: "6.852" }
               - column: { name: start_date, value: "2026-07-05" }
               - column: { name: end_date, value: "2026-07-08" }
               - column: { name: genre, value: "Rock" }
@@ -53,8 +69,12 @@ databaseChangeLog:
               - column: { name: id, value: "5" }
               - column: { name: name, value: "Hellfest" }
               - column: { name: city, value: "Clisson"}
-              - column: { name: lat, value: "47.087" }
-              - column: { name: lng, value: "-1.283" }
+              - column: { name: description, value: "Le rendez-vous incontournable des fans de musiques extrêmes." }
+              - column: { name: address, value: "Rue du Champ Louet" }
+              - column: { name: postal_code, value: "44190" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "47.087" }
+              - column: { name: longitude, value: "-1.283" }
               - column: { name: start_date, value: "2026-06-21" }
               - column: { name: end_date, value: "2026-06-25" }
               - column: { name: genre, value: "Metal" }
@@ -64,8 +84,12 @@ databaseChangeLog:
               - column: { name: id, value: "6" }
               - column: { name: name, value: "Nuits Sonores" }
               - column: { name: city, value: "Lyon"}
-              - column: { name: lat, value: "45.757" }
-              - column: { name: lng, value: "4.835" }
+              - column: { name: description, value: "Un festival urbain dédié aux cultures électroniques et indépendantes." }
+              - column: { name: address, value: "Divers lieux dans Lyon" }
+              - column: { name: postal_code, value: "69000" }
+              - column: { name: country, value: "France" }
+              - column: { name: latitude, value: "45.757" }
+              - column: { name: longitude, value: "4.835" }
               - column: { name: start_date, value: "2026-05-25" }
               - column: { name: end_date, value: "2026-05-30" }
               - column: { name: genre, value: "Electro" }

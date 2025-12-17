@@ -2,25 +2,41 @@ package com.project.festmap.api;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.project.festmap.domain.Festival;
-import com.project.festmap.repository.FestivalRepository;
+import com.project.festmap.dto.FestivalRequest;
+import com.project.festmap.dto.FestivalResponse;
+import com.project.festmap.service.FestivalService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
 public class FestivalController {
 
-  private final FestivalRepository festivalRepository;
+  private final FestivalService festivalService;
 
-  public FestivalController(FestivalRepository festivalRepository) {
-    this.festivalRepository = festivalRepository;
+  public FestivalController(FestivalService festivalService) {
+    this.festivalService = festivalService;
   }
 
   @GetMapping("/festivals")
-  public List<Festival> getAllFestivals() {
-    return festivalRepository.findAll();
+  public List<FestivalResponse> getAllFestivals() {
+    return festivalService.getAllFestivals();
+  }
+
+  @PostMapping("/festivals")
+  public ResponseEntity<FestivalResponse> createFestival(
+      @Valid @RequestBody FestivalRequest festivalRequest) {
+    FestivalResponse festivalResponse = festivalService.createFestival(festivalRequest);
+    return new ResponseEntity<>(festivalResponse, HttpStatus.CREATED);
+  }
+
+  @DeleteMapping("/festivals/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteFestival(@PathVariable Long id) {
+    festivalService.deleteFestival(id);
   }
 }
