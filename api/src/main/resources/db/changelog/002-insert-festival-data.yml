@@ -6,7 +6,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "1" }
               - column: { name: name, value: "Les Vieilles Charrues" }
               - column: { name: city, value: "Carhaix-Plouguer" }
               - column: { name: description, value: "Le plus grand festival de France en plein cœur de la Bretagne." }
@@ -21,7 +20,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "2" }
               - column: { name: name, value: "Rock en Seine" }
               - column: { name: city, value: "Saint-Cloud (Paris)" }
               - column: { name: description, value: "Le dernier grand rendez-vous rock de l'été aux portes de Paris." }
@@ -36,7 +34,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "3" }
               - column: { name: name, value: "Garorock" }
               - column: { name: city, value: "Marmande" }
               - column: { name: description, value: "Un des plus anciens festivals du Sud-Ouest, entre rock, électro et pop." }
@@ -51,7 +48,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "4" }
               - column: { name: name, value: "Les Eurockéennes" }
               - column: { name: city, value: "Belfort"}
               - column: { name: description, value: "Un festival engagé sur une presqu'île, au bord de l'eau." }
@@ -66,7 +62,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "5" }
               - column: { name: name, value: "Hellfest" }
               - column: { name: city, value: "Clisson"}
               - column: { name: description, value: "Le rendez-vous incontournable des fans de musiques extrêmes." }
@@ -81,7 +76,6 @@ databaseChangeLog:
         - insert:
             tableName: festival
             columns:
-              - column: { name: id, value: "6" }
               - column: { name: name, value: "Nuits Sonores" }
               - column: { name: city, value: "Lyon"}
               - column: { name: description, value: "Un festival urbain dédié aux cultures électroniques et indépendantes." }

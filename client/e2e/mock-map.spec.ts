@@ -53,9 +53,12 @@ test.describe('Mock festival map minimal flow', () => {
 
         // Récupération des data-testid
         const items = page.locator('[data-testid^="festival-list-item-"]');
-        const itemsBefore = await items.count();
         const markers = page.locator('[data-testid^="festival-marker-"]')
-        const markersBefore = await items.count();
+
+        await expect(items.first()).toBeVisible();
+
+        const itemsBefore = await items.count();
+        const markersBefore = await markers.count();
 
         // Action
         await page.getByTestId(`delete-festival-list-item-1`).click();
