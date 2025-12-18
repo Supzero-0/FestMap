@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
-import { Festival, FESTIVAL_API } from '../../types';
+import { Festival } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MessageService } from 'primeng/api';
+import { FestivalService } from '../../services/festival-service';
 
 const DefaultIcon = L.icon({
   iconRetinaUrl: 'leaflet/marker-icon-2x.png',
@@ -23,8 +25,9 @@ const DefaultIcon = L.icon({
   styleUrl: './festival-map.scss',
 })
 export class FestivalMap implements AfterViewInit, OnDestroy {
-  private readonly api = inject(FESTIVAL_API);
+  private readonly festivalService = inject(FestivalService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly messageService = inject(MessageService);
 
   private map!: L.Map;
   private markersGroup = L.featureGroup();
@@ -34,13 +37,18 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     this.initMap();
 
     // Abonnenement aux données (Observables)
-    this.api
+    this.festivalService
       .getAll$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (festivals) => this.renderMarkers(festivals),
         error: (err) => {
           console.error('[FestivalMap] getAll$ error:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: 'Impossible de charger les festivals.',
+          });
         },
       });
 
@@ -66,9 +74,9 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
     // Création des marqueurs
     festivals?.forEach((f) => {
-      if (f.lat == null || f.lng == null) return;
+      if (f.latitude == null || f.longitude == null) return;
 
-      const marker = L.marker([f.lat, f.lng], {
+      const marker = L.marker([f.latitude, f.longitude], {
         title: f.name,
         alt: f.name,
       }).bindPopup(`
