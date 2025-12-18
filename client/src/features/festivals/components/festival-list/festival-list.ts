@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { Festival, FESTIVAL_API } from '../../types';
+import { Festival } from '../../types';
 import { catchError, map, of, startWith } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { FestivalService } from '../../services/festival-service';
 
 type Vm = {
   data: Festival[];
@@ -18,11 +19,11 @@ type Vm = {
   styleUrl: './festival-list.scss',
 })
 export class FestivalList {
-  private readonly api = inject(FESTIVAL_API);
+  private readonly festivalService = inject(FestivalService);
 
   @Output() selectFestival = new EventEmitter<number>();
 
-  readonly vm$ = this.api.getAll$().pipe(
+  readonly vm$ = this.festivalService.getAll$().pipe(
     map((data) => ({ data, loading: false, error: null }) as Vm),
     startWith({ data: [], loading: true, error: null } as Vm),
     catchError((err) => {
@@ -38,6 +39,6 @@ export class FestivalList {
   }
 
   onDelete(id: number) {
-    this.api.delete$(id);
+    this.festivalService.delete$(id);
   }
 }

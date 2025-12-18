@@ -1,19 +1,16 @@
-import { InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
-
 export interface Festival {
   id: number;
   name: string;
+  description?: string;
+  address?: string;
   city: string;
-  lat: number;
-  lng: number;
-  date?: string;
+  postalCode?: string;
+  country?: string;
+  latitude: number;
+  longitude: number;
+  startDate: string;
+  endDate: string;
   genre?: string;
 }
 
-export interface FestivalApi {
-  getAll$(): Observable<Festival[]>;
-  delete$(id: number): Observable<void>;
-}
-
-export const FESTIVAL_API = new InjectionToken<FestivalApi>('FESTIVAL_API');
+export type FestivalRequest = Omit<Festival, 'id'>;
