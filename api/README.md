@@ -44,35 +44,37 @@ L'API sera accessible sur `http://localhost:8080`.
 
 L'API sera accessible sur `http://localhost:8080`.
 
-## Compilation et Tests
+## Qualité du Code et Tests
 
-Pour compiler le projet et exécuter les tests unitaires :
+Ce projet utilise plusieurs plugins Maven pour garantir un haut niveau de qualité de code.
 
-```bash
-cd api
-./mvnw clean install
-```
+### Lancer les tests
 
-Pour exécuter uniquement les tests :
+Pour exécuter les tests unitaires et d'intégration :
 
 ```bash
 cd api
 ./mvnw test
 ```
 
-## Formatage et Linting
+### Cycle de vie complet de vérification
 
-Ce projet adhère aux conventions de code Java standard. Si des plugins spécifiques de formatage ou d'analyse statique (comme Checkstyle ou Spotless) sont configurés dans le `pom.xml`, vous pouvez utiliser les commandes suivantes (à adapter selon les plugins réellement configurés) :
+Pour lancer le cycle de vie complet (tests, rapport de couverture, vérification du style de code et du seuil de couverture), utilisez la commande `verify`. C'est la commande à utiliser en intégration continue.
 
-Pour appliquer le formatage du code :
 ```bash
-./mvnw spotless:apply # Exemple si Spotless est utilisé
+cd api
+./mvnw verify
 ```
 
-Pour vérifier la conformité au style et les règles de linting :
-```bash
-./mvnw checkstyle:check # Exemple si Checkstyle est utilisé
-```
+Cette commande va automatiquement :
+1.  Compiler le code.
+2.  Exécuter tous les tests.
+3.  Analyser la couverture de code avec **JaCoCo**. Le rapport est généré dans `target/site/jacoco/index.html`.
+4.  Vérifier que le seuil de couverture de 70% est atteint.
+5.  Valider le style de code avec **Checkstyle**.
+
+Si l'une de ces étapes échoue, le build sera interrompu.
+
 
 ## Endpoints de l'API
 
