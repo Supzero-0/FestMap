@@ -37,7 +37,35 @@ public class FestivalService {
   }
 
   public FestivalResponse createFestival(FestivalRequest festivalRequest) {
+    // Renvoie des Exception pour les test mockito
+    if (festivalRequest.getName() == null || festivalRequest.getName().isBlank()) {
+      throw new IllegalArgumentException("Festival name cannot be null or empty.");
+    }
+    if (festivalRequest.getStartDate() != null
+        && festivalRequest.getEndDate() != null
+        && festivalRequest.getEndDate().isBefore(festivalRequest.getStartDate())) {
+      throw new IllegalArgumentException("End date cannot be before start date.");
+    }
+
     Festival festival = festivalMapper.toFestivalEntity(festivalRequest);
+    festival = festivalRepository.save(festival);
+    return festivalMapper.toFestivalResponse(festival);
+  }
+
+  public FestivalResponse updateFestival(Long id, FestivalRequest festivalRequest) {
+    Festival festival =
+        festivalRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new FestivalNotFoundException("Festival with id " + id + " not found."));
+
+    festival.setName(festivalRequest.getName());
+    festival.setCity(festivalRequest.getCity());
+    festival.setStartDate(festivalRequest.getStartDate());
+    festival.setEndDate(festivalRequest.getEndDate());
+    festival.setLatitude(festivalRequest.getLatitude());
+    festival.setLongitude(festivalRequest.getLongitude());
+
     festival = festivalRepository.save(festival);
     return festivalMapper.toFestivalResponse(festival);
   }
