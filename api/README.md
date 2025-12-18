@@ -9,6 +9,16 @@ Ce répertoire contient l'implémentation de l'API REST pour l'application FestM
 *   Maven
 *   PostgreSQL (via Docker Compose)
 
+## Configuration
+
+La configuration de l'application (ports, base de données) est centralisée dans un fichier `.env` qui doit être placé à la racine du projet (`FestMap/`).
+
+Pour commencer, copiez le fichier d'exemple et personnalisez-le si besoin :
+```bash
+cp .env.example .env
+```
+Ce fichier est utilisé par Docker Compose pour configurer les services et peut également être utilisé pour une exécution locale.
+
 ## Démarrage rapide
 
 ### Prérequis
@@ -17,32 +27,34 @@ Assurez-vous d'avoir Java Development Kit (JDK) 17+ et Maven installés sur votr
 
 ### Exécuter avec Docker Compose (recommandé)
 
-Depuis le répertoire racine du projet (`FestMap/`), vous pouvez démarrer l'API et ses dépendances (base de données) avec Docker Compose :
+Après avoir créé votre fichier `.env`, vous pouvez démarrer l'API et ses dépendances depuis la racine du projet :
 
 ```bash
 docker-compose up --build api
 ```
 
-L'API sera accessible sur `http://localhost:8080`.
+L'API sera accessible sur le port `API_PORT` défini dans votre `.env` (par défaut: `http://localhost:8080`).
 
 ### Exécuter localement avec Maven
 
-1.  **Naviguez vers le répertoire `api` :**
+1.  Assurez-vous que les variables de votre fichier `.env` correspondent à votre instance de base de données locale.
+2.  Chargez les variables d'environnement (par exemple, avec `source .env` si votre shell le supporte).
+3.  Naviguez vers le répertoire `api` :
     ```bash
     cd api
     ```
 
-2.  **Construire le projet :**
+4.  **Construire le projet :**
     ```bash
     ./mvnw clean install
     ```
 
-3.  **Exécuter l'application Spring Boot :**
+5.  **Exécuter l'application Spring Boot :**
     ```bash
     ./mvnw spring-boot:run
     ```
 
-L'API sera accessible sur `http://localhost:8080`.
+L'API sera accessible sur le port `API_PORT` défini dans votre environnement.
 
 ## Qualité du Code et Tests
 
