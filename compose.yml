@@ -3,16 +3,18 @@ services:
   db:
     image: postgres:16-alpine
     container_name: FestMapDB
+    env_file:
+      - ./.env
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${DB_PORT}:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -24,14 +26,13 @@ services:
       target: dev
     container_name: FestMapAPI
     working_dir: /app
+    env_file:
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
-      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB_NAME}
-      DB_USERNAME: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
       SERVER_PORT: ${API_PORT}
       SPRING_DEVTOOLS_RESTART_POLL_INTERVAL: 2s
       SPRING_DEVTOOLS_RESTART_QUIET_PERIOD: 1s
