@@ -35,8 +35,15 @@ jobs:
       - name: Lint
         run: ./mvnw -B -ntp checkstyle:check
 
-#      - name: Test
-#        run: ./mvnw -B -ntp test
+      - name: Test & Coverage
+        run: ./mvnw -B -ntp verify
+
+      - name: Upload coverage report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-report
+          path: api/target/site/jacoco
 
   frontend:
     name: Frontend
