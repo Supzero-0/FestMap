@@ -33,3 +33,9 @@ logging:
           core: DEBUG
           JdbcTemplate: DEBUG
           StatementCreatorUtils: TRACE
+springdoc:
+  packages-to-scan:
+    - com.project.festmap.festival.api
+    - com.project.festmap.shared.api
+  swagger-ui:
+    path: /swagger-ui.html
