@@ -38,7 +38,8 @@ export class FestivalList {
     this.selectFestival.emit(id);
   }
 
-  onDelete(id: number) {
-    this.festivalService.delete$(id);
+  onDelete(id: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.festivalService.delete$(id).subscribe();
   }
 }
