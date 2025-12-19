@@ -29,7 +29,7 @@
             <span class="city">{{ f.city }}</span>
             <small>({{ f.genre }})</small>
             <button
-              (click)="onDelete(f.id)"
+              (click)="onDelete(f.id, $event)"
               [attr.data-testid]="`delete-festival-list-item-` + f.id"
             >
               Supprimer
