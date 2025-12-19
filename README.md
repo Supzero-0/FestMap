@@ -53,6 +53,12 @@ FestMap/
 - Frontend → http://localhost:4200
 - API Health → http://localhost:8080/api/health
 
+## 📖 Documentation API
+La documentation de l'API est générée automatiquement avec **OpenAPI (Swagger)**.
+Elle est interactive et permet de visualiser et tester chaque endpoint.
+
+- **URL d'accès** → http://localhost:8080/swagger-ui.html
+
 ## 🧪 Health check attendu
 
 Succès :
