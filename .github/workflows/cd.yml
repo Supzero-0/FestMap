@@ -1,0 +1,123 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: '[CD] Backend Checks'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Format Check (Spotless)
+        run: ./mvnw -B -ntp spotless:check
+
+      - name: Linter (Checkstyle)
+        run: ./mvnw -B -ntp checkstyle:check
+
+      - name: Build, Test & Coverage (Verify)
+        run: ./mvnw -B -ntp verify
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: api/target/surefire-reports/
+
+  frontend:
+    name: '[CD] Frontend Checks'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'client/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint Check
+        run: npm run lint
+
+      - name: Format Check
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build -- --configuration=production
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('client/package-lock.json') }}
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: E2E Tests
+        run: npm run e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: client/playwright-report/
+          retention-days: 7
+
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    # Dépend des succès des jobs précédents
+    needs: [backend, frontend]
+    # 'if: success()' est la condition par défaut de 'needs', mais on la garde pour la clarté.
+    # On s'assure aussi d'être sur la branche 'main'.
+    if: github.ref == 'refs/heads/main' && success()
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Missing secrets.RENDER_DEPLOY_HOOK_URL"
+            exit 1
+          fi
+          echo "Triggering Render backend deployment..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "Backend deployment signal sent to Render."
+
+      - name: Trigger Vercel Deploy Hook
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "Missing secrets.VERCEL_DEPLOY_HOOK_URL"
+            exit 1
+          fi
+          echo "Triggering Vercel frontend deployment..."
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
+          echo "Frontend deployment signal sent to Vercel."

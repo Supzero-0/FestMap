@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Festival, FestivalRequest } from '../types';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FestivalService {
-  private readonly baseUrl = '/api/festivals';
+  private readonly baseUrl = `${environment.apiUrl}/festivals`;
   private readonly refreshSubject = new BehaviorSubject<void>(undefined);
 
   constructor(private http: HttpClient) {}
