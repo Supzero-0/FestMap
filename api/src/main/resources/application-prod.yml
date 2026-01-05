@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    # Render (ou autre PaaS) fournit l'URL complète via une seule variable d'environnement.
+    # L'ajout de "?sslmode=require" est souvent nécessaire pour les bases de données cloud.
+    url: ${SPRING_DATASOURCE_URL}?sslmode=require
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      # Paramètres de pool pour la production
+      pool-name: FestMapHikariPool-Prod
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000 # 30 secondes
+      idle-timeout: 600000 # 10 minutes
+      max-lifetime: 1800000 # 30 minutes
+
+  jpa:
+    # Ne pas afficher les requêtes SQL en production
+    show-sql: false
+
+logging:
+  level:
+    # Niveau de log par défaut en production
+    root: INFO
+    # Garder les logs de l'application à INFO
+    com.project.festmap: INFO
+
+app:
+  cors:
+    # L'origine est définie par une variable d'environnement en production.
+    # La valeur par défaut est celle du frontend Vercel.
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://fest-map-ml.vercel.app}
