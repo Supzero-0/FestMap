@@ -2,6 +2,7 @@ package com.project.festmap.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,8 @@ public class SecurityConfig {
                 auth.requestMatchers(
                         "/api/auth/**", "/api/health", "/v3/api-docs/**", "/swagger-ui/**")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/festivals/**")
+                    .permitAll() // Permettre GET /api/festivals
                     .anyRequest()
                     .authenticated())
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
