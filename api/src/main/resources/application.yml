@@ -37,9 +37,13 @@ springdoc:
   packages-to-scan:
     - com.project.festmap.festival.api
     - com.project.festmap.shared.api
+    - com.project.festmap.user.api
   swagger-ui:
     path: /swagger-ui.html
 
 app:
   cors:
     allowed-origins: http://localhost:4200
+  jwt:
+    secret: ${JWT_SECRET:c3VwZXItc2VjcmV0LWtleS1mb3Itand0LXNlY3VyaXR5LXRoYXQtbXVzdC1iZS1sb25nLWVub3VnaA==}
+    expiration: 86400000 # 24 hours
