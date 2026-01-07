@@ -10,17 +10,24 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../features/auth/services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.html',
   styleUrls: ['./register-page.scss'],
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule],
 })
 export class RegisterPageComponent {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.registerForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -42,7 +49,17 @@ export class RegisterPageComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      this.authService.register(this.registerForm.value).subscribe({
+        next: (response) => {
+          console.log('Registration successful', response);
+          // Handle successful registration, e.g., redirect to login
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          console.error('Registration failed', error);
+          // Handle registration error, e.g., show error message to user
+        },
+      });
     }
   }
 }

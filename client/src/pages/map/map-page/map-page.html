@@ -31,9 +31,13 @@
 
     <div class="mt-8 pt-4 border-t border-fest-border-subtle flex items-center gap-2">
       <div class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"></div>
-      <div class="text-xs">
-        <div class="font-semibold">Ton profil</div>
-        <div class="text-fest-text/60">username</div>
+      <div class="flex flex-col gap-2">
+        <p-button label="Login" routerLink="/login" styleClass="p-button-sm"></p-button>
+        <p-button
+          label="Register"
+          routerLink="/register"
+          styleClass="p-button-sm p-button-secondary"
+        ></p-button>
       </div>
     </div>
   </aside>
