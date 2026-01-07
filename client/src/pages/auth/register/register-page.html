@@ -1,0 +1,33 @@
+<div class="register-container">
+  <p-card header="Register">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="email">Email</label>
+          <input pInputText id="email" type="email" formControlName="email" />
+        </div>
+        <div class="p-field">
+          <label for="password">Password</label>
+          <input pInputText id="password" type="password" formControlName="password" />
+        </div>
+        <div class="p-field">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            pInputText
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+          />
+        </div>
+      </div>
+      <ng-template pTemplate="footer">
+        <p-button
+          label="Register"
+          icon="pi pi-check"
+          type="submit"
+          [disabled]="registerForm.invalid"
+        ></p-button>
+      </ng-template>
+    </form>
+  </p-card>
+</div>
