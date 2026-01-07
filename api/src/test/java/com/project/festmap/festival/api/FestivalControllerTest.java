@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,6 +43,7 @@ class FestivalControllerTest {
   }
 
   @Test
+  @WithMockUser(roles = "ADMIN")
   void shouldCreateFestival() throws Exception {
     FestivalRequest festivalRequest = new FestivalRequest();
     festivalRequest.setName("Test Festival");
@@ -62,6 +64,7 @@ class FestivalControllerTest {
   }
 
   @Test
+  @WithMockUser(roles = "ADMIN")
   void shouldReturnBadRequestWhenCreatingFestivalWithInvalidData() throws Exception {
     FestivalRequest festivalRequest = new FestivalRequest();
     // Name is missing, which is invalid
@@ -81,11 +84,13 @@ class FestivalControllerTest {
   }
 
   @Test
+  @WithMockUser(roles = "ADMIN")
   void shouldDeleteExistingFestival() throws Exception {
     mockMvc.perform(delete("/api/festivals/1")).andExpect(status().isNoContent());
   }
 
   @Test
+  @WithMockUser(roles = "ADMIN")
   void shouldReturnNotFoundWhenDeletingNonExistingFestival() throws Exception {
     mockMvc.perform(delete("/api/festivals/999")).andExpect(status().isNotFound());
   }
