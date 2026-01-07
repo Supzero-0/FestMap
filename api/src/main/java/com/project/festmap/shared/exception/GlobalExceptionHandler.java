@@ -6,6 +6,7 @@ import org.springframework.dao.*;
 import org.springframework.http.*;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,20 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleFestivalNotFound(FestivalNotFoundException ex) {
     var errorResponse = new ErrorResponse(ex.getMessage());
     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+  }
+
+  // Email already exists
+  @ExceptionHandler(EmailAlreadyExistsException.class)
+  public ResponseEntity<ErrorResponse> handleEmailExists(EmailAlreadyExistsException ex) {
+    var errorResponse = new ErrorResponse(ex.getMessage());
+    return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+  }
+
+  // Invalid credentials
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+    var errorResponse = new ErrorResponse("Invalid email or password");
+    return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
   }
 
   // Connexion/timeout/DB down -> 503

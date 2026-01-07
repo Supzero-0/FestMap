@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/001-create-festival-table.yml
   - include:
       file: db/changelog/002-insert-festival-data.yml
+  - include:
+      file: db/changelog/003-create-user-table.yml
