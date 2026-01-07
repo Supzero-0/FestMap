@@ -3,7 +3,8 @@ import { Component, ViewChild } from '@angular/core';
 import { FestivalMap } from '../../../features/festivals/components/festival-map/festival-map';
 import { FestivalList } from '../../../features/festivals/components/festival-list/festival-list';
 import { ButtonModule } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../features/auth/services/auth-service';
 
 @Component({
   selector: 'app-map-page',
@@ -14,7 +15,21 @@ import { RouterLink } from '@angular/router';
 export class MapPage {
   @ViewChild(FestivalMap) mapCmp!: FestivalMap;
 
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
+
   onSelectFestival(id: number) {
     this.mapCmp?.focusMarker(id);
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

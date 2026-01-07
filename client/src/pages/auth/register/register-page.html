@@ -1,6 +1,6 @@
 <div class="register-container">
-  <p-card header="Register">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <p-card header="Register">
       <div class="p-fluid">
         <div class="p-field">
           <label for="email">Email</label>
@@ -28,6 +28,6 @@
           [disabled]="registerForm.invalid"
         ></p-button>
       </ng-template>
-    </form>
-  </p-card>
+    </p-card>
+  </form>
 </div>

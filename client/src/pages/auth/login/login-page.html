@@ -1,6 +1,6 @@
 <div class="login-container">
-  <p-card header="Login">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <p-card header="Login">
       <div class="p-fluid">
         <div class="p-field">
           <label for="email">Email</label>
@@ -19,6 +19,6 @@
           [disabled]="loginForm.invalid"
         ></p-button>
       </ng-template>
-    </form>
-  </p-card>
+    </p-card>
+  </form>
 </div>
