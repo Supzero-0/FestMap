@@ -6,27 +6,28 @@ import {
   ReactiveFormsModule,
   AbstractControl,
 } from '@angular/forms';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../features/auth/services/auth-service';
+import { AuthService } from '../../services/auth-service';
 import { Router } from '@angular/router';
+import { AuthModalService } from '../../services/auth-modal';
 
 @Component({
-  selector: 'app-register-page',
-  templateUrl: './register-page.html',
-  styleUrls: ['./register-page.scss'],
+  selector: 'app-register-form',
+  templateUrl: './register-form.html',
+  styleUrls: ['./register-form.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule],
 })
-export class RegisterPageComponent {
+export class RegisterFormComponent {
   registerForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private authModalService: AuthModalService,
   ) {
     this.registerForm = this.fb.group(
       {
@@ -52,8 +53,7 @@ export class RegisterPageComponent {
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
           console.log('Registration successful', response);
-          // Handle successful registration, e.g., redirect to login
-          this.router.navigate(['/login']);
+          this.authModalService.openModal(0); // Switch to login tab after successful registration
         },
         error: (error) => {
           console.error('Registration failed', error);

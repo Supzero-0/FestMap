@@ -1,2 +1,8 @@
+<div class="p-4 flex justify-content-end gap-2">
+  <p-button label="Login" (onClick)="openLoginModal()"></p-button>
+  <p-button label="Register" (onClick)="openRegisterModal()"></p-button>
+</div>
+
 <p-toast />
 <router-outlet />
+<app-auth-modal></app-auth-modal>
