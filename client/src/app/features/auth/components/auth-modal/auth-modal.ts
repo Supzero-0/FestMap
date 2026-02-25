@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -26,6 +26,9 @@ import { RegisterFormComponent } from '../register-form/register-form';
   styleUrls: ['./auth-modal.scss'],
 })
 export class AuthModalComponent implements OnInit, OnDestroy {
+  @ViewChild(LoginFormComponent) loginFormComponent!: LoginFormComponent;
+  @ViewChild(RegisterFormComponent) registerFormComponent!: RegisterFormComponent;
+
   display = false;
   activeIndex = 0; // 0 login, 1 register
   private subscriptions = new Subscription();
@@ -55,6 +58,14 @@ export class AuthModalComponent implements OnInit, OnDestroy {
 
     this.activeIndex = numericValue;
     this.authModalService.setActiveTab(numericValue);
+  }
+
+  submitForm(): void {
+    if (this.activeIndex === 0 && this.loginFormComponent) {
+      this.loginFormComponent.onSubmit();
+    } else if (this.activeIndex === 1 && this.registerFormComponent) {
+      this.registerFormComponent.onSubmit();
+    }
   }
 
   onHide() {

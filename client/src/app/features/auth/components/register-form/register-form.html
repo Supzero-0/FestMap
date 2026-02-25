@@ -1,24 +1,71 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div class="p-fluid">
-    <div class="p-field">
-      <label for="email">Email</label>
-      <input pInputText id="email" type="email" formControlName="email" />
+<form [formGroup]="registerForm" class="p-4">
+  <div class="flex flex-col gap-4">
+    <div class="p-field flex flex-col">
+      <label for="email" class="mb-2 text-sm font-medium text-gray-700">Email</label>
+      <input pInputText id="email" type="email" formControlName="email" class="w-full" />
+      <div
+        *ngIf="
+          registerForm.get('email')?.invalid &&
+          (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        <div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</div>
+      </div>
     </div>
-    <div class="p-field">
-      <label for="password">Password</label>
-      <input pInputText id="password" type="password" formControlName="password" />
+    <div class="flex gap-4">
+      <div class="p-field flex flex-col flex-1">
+        <label for="password" class="mb-2 text-sm font-medium text-gray-700">Password</label>
+        <input pInputText id="password" type="password" formControlName="password" class="w-full" />
+        <div
+          *ngIf="
+            registerForm.get('password')?.invalid &&
+            (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          <div *ngIf="registerForm.get('password')?.errors?.['required']">
+            Password is required.
+          </div>
+          <div *ngIf="registerForm.get('password')?.errors?.['minlength']">
+            Password must be at least 6 characters.
+          </div>
+        </div>
+      </div>
+      <div class="p-field flex flex-col flex-1">
+        <label for="confirmPassword" class="mb-2 text-sm font-medium text-gray-700"
+          >Confirm Password</label
+        >
+        <input
+          pInputText
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          class="w-full"
+        />
+        <div
+          *ngIf="
+            registerForm.get('confirmPassword')?.invalid &&
+            (registerForm.get('confirmPassword')?.dirty ||
+              registerForm.get('confirmPassword')?.touched)
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">
+            Confirm Password is required.
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="p-field">
-      <label for="confirmPassword">Confirm Password</label>
-      <input pInputText id="confirmPassword" type="password" formControlName="confirmPassword" />
+    <div
+      *ngIf="
+        registerForm.errors?.['passwordMismatch'] &&
+        (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched)
+      "
+      class="text-red-500 text-xs mt-1"
+    >
+      Passwords do not match.
     </div>
-  </div>
-  <div class="flex justify-content-end mt-3">
-    <p-button
-      label="Register"
-      icon="pi pi-check"
-      type="submit"
-      [disabled]="registerForm.invalid"
-    ></p-button>
   </div>
 </form>
