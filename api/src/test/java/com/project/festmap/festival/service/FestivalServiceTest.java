@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -18,6 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.project.festmap.address.domain.Address;
+import com.project.festmap.address.dto.AddressRequest;
+import com.project.festmap.address.dto.AddressResponse;
+import com.project.festmap.address.service.AddressService;
 import com.project.festmap.festival.domain.Festival;
 import com.project.festmap.festival.domain.FestivalRepository;
 import com.project.festmap.festival.dto.FestivalRequest;
@@ -33,20 +38,56 @@ public class FestivalServiceTest {
 
   @Mock private FestivalMapper festivalMapper;
 
+  @Mock private AddressService addressService;
+
   @InjectMocks private FestivalService festivalService;
 
   private Festival festival;
   private FestivalRequest festivalRequest;
   private FestivalResponse festivalResponse;
+  private Address address;
+  private AddressResponse addressResponse;
 
   @BeforeEach
   void setUp() {
+    address = new Address();
+    address.setId(1L);
+    address.setAddressLine("1 Test Street");
+    address.setPostalCode("75000");
+    address.setCity("Test City");
+    address.setCountry("Test Country");
+    address.setLatitude(45.0);
+    address.setLongitude(5.0);
+
+    addressResponse =
+        AddressResponse.builder()
+            .id(1L)
+            .addressLine("1 Test Street")
+            .postalCode("75000")
+            .city("Test City")
+            .country("Test Country")
+            .latitude(45.0)
+            .longitude(5.0)
+            .build();
+
     festival = new Festival();
     festival.setId(1L);
     festival.setName("Test Festival");
+    festival.setAddress(address);
+
+    AddressRequest addressRequest =
+        AddressRequest.builder()
+            .addressLine("1 Test Street")
+            .postalCode("75000")
+            .city("Test City")
+            .country("Test Country")
+            .latitude(45.0)
+            .longitude(5.0)
+            .build();
 
     festivalRequest = new FestivalRequest();
     festivalRequest.setName("Test Festival");
+    festivalRequest.setAddress(addressRequest);
 
     festivalResponse = new FestivalResponse();
     festivalResponse.setId(1L);
@@ -54,9 +95,9 @@ public class FestivalServiceTest {
   }
 
   @Test
-  @DisplayName("Création d'un festival avec succès")
   public void createFestival_whenValidRequest_shouldReturnFestivalResponse() {
     // Arrange
+    when(addressService.createAddress(any(AddressRequest.class))).thenReturn(address);
     when(festivalMapper.toFestivalEntity(any(FestivalRequest.class))).thenReturn(festival);
     when(festivalRepository.save(any(Festival.class))).thenReturn(festival);
     when(festivalMapper.toFestivalResponse(any(Festival.class))).thenReturn(festivalResponse);
@@ -91,6 +132,8 @@ public class FestivalServiceTest {
   public void updateFestival_whenFestivalExists_shouldReturnUpdatedFestivalResponse() {
     // Arrange
     when(festivalRepository.findById(1L)).thenReturn(Optional.of(festival));
+    when(addressService.updateAddress(any(Long.class), any(AddressRequest.class)))
+        .thenReturn(addressResponse);
     when(festivalRepository.save(any(Festival.class))).thenReturn(festival);
     when(festivalMapper.toFestivalResponse(any(Festival.class))).thenReturn(festivalResponse);
 
@@ -120,7 +163,8 @@ public class FestivalServiceTest {
   @DisplayName("Suppression d'un festival existant")
   public void deleteFestival_whenFestivalExists_shouldDeleteFestival() {
     // Arrange
-    when(festivalRepository.existsById(1L)).thenReturn(true);
+    when(festivalRepository.findById(1L)).thenReturn(Optional.of(festival));
+    doNothing().when(addressService).deleteAddress(any(Long.class));
 
     // Act
     festivalService.deleteFestival(1L);
@@ -133,7 +177,7 @@ public class FestivalServiceTest {
   @DisplayName("Suppression d'un festival inexistant")
   public void deleteFestival_whenFestivalDoesNotExist_shouldThrowFestivalNotFoundException() {
     // Arrange
-    when(festivalRepository.existsById(2L)).thenReturn(false);
+    when(festivalRepository.findById(2L)).thenReturn(Optional.empty());
 
     // Act & Assert
     assertThrows(

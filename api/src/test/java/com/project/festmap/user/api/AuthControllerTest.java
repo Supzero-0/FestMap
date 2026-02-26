@@ -155,7 +155,7 @@ class AuthControllerTest {
 
     // 2. Try to access protected endpoint with token
     String festivalContent =
-        "{\"name\":\"SecureFest\",\"city\":\"Protected City\",\"country\":\"Authland\",\"startDate\":\"2026-10-10\",\"endDate\":\"2026-10-11\",\"latitude\":10,\"longitude\":10}";
+        "{\"name\":\"SecureFest\",\"description\":\"A secure festival\",\"genre\":\"Secure\",\"startDate\":\"2026-10-10\",\"endDate\":\"2026-10-11\",\"address\":{\"addressLine\":\"1 Secure Street\",\"postalCode\":\"00000\",\"city\":\"Protected City\",\"country\":\"Authland\",\"latitude\":10.0,\"longitude\":10.0}}";
     mockMvc
         .perform(
             post("/api/festivals")
