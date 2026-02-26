@@ -20,7 +20,7 @@
 
     <!-- Liste des festivals -->
     <div class="flex-1 overflow-y-auto">
-      <app-festival-list></app-festival-list>
+      <app-festival-list (selectFestival)="onSelectFestival($event)"></app-festival-list>
     </div>
   </section>
 
@@ -52,7 +52,7 @@
     <div
       class="flex-1 rounded-2xl overflow-hidden bg-fest-surface border border-fest-border-subtle"
     >
-      <app-festival-map></app-festival-map>
+      <app-festival-map #festivalMap></app-festival-map>
     </div>
   </section>
   <p-toast />

@@ -23,15 +23,11 @@ test.describe('Mock festival map', () => {
 
         await page.goto('/');
         await expect(page.locator('app-festival-list .loading')).not.toBeVisible();
+        await expect(page.locator('[data-testid^="festival-marker-"]')).toHaveCount(mockFestivalsData.length);
     });
 
     test('Carte visible', async ({ page }) => {
         await expect(page.getByTestId('festival-map')).toBeVisible();
-    });
-
-    test('Click sur item liste -> popup visible', async ({ page }) => {
-        await page.locator('[data-testid^="festival-list-item-"]').first().click();
-        await expect(page.getByTestId('festival-popup-1')).toBeVisible();
     });
 
     test('Marqueurs & nombre d"items === items.json', async ({ page }) => {

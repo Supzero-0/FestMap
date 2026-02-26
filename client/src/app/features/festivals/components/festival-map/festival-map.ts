@@ -44,7 +44,6 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     try {
       this.L = await this.loadLeaflet();
 
-      this.setupDefaultMarkerIcon();
       this.initMap();
 
       this.festivalService
@@ -73,21 +72,6 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     }
   }
 
-  private setupDefaultMarkerIcon(): void {
-    const DefaultIcon = this.L.icon({
-      iconRetinaUrl: 'leaflet/marker-icon-2x.png',
-      iconUrl: 'leaflet/marker-icon.png',
-      shadowUrl: 'leaflet/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      tooltipAnchor: [16, -28],
-      shadowSize: [41, 41],
-    });
-
-    (this.L.Marker as any).prototype.options.icon = DefaultIcon;
-  }
-
   private initMap(): void {
     this.map = this.L.map('festivalMap', {
       center: [46.8, 2.5],
@@ -111,20 +95,25 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     festivals?.forEach((f) => {
       if (f.latitude == null || f.longitude == null) return;
 
+      const customIcon = this.L.divIcon({
+        className: 'custom-marker-icon',
+        html: `<div data-testid="festival-marker-${f.id}" style="width: 25px; height: 41px; background-image: url('leaflet/marker-icon.png'); background-size: contain;"></div>`,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+      });
+
       const marker = this.L.marker([f.latitude, f.longitude], {
         title: f.name,
         alt: f.name,
+        icon: customIcon,
       }).bindPopup(`
           <section data-testid="festival-popup-${f.id}">
             <strong>${f.name}</strong>
             <br>${f.city}
           </section>
         `);
-
-      marker.on('add', () => {
-        const elem = marker.getElement();
-        if (elem) elem.setAttribute('data-testid', `festival-marker-${f.id}`);
-      });
 
       this.markersGroup.addLayer(marker);
       this.markersById.set(f.id, marker as unknown as LeafletMarker);
