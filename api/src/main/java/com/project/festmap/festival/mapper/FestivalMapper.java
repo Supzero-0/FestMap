@@ -2,6 +2,8 @@ package com.project.festmap.festival.mapper;
 
 import org.springframework.stereotype.Component;
 
+import com.project.festmap.address.domain.Address;
+import com.project.festmap.address.dto.AddressResponse;
 import com.project.festmap.festival.domain.Festival;
 import com.project.festmap.festival.dto.FestivalRequest;
 import com.project.festmap.festival.dto.FestivalResponse;
@@ -14,15 +16,23 @@ public class FestivalMapper {
     festivalResponse.setId(festival.getId());
     festivalResponse.setName(festival.getName());
     festivalResponse.setDescription(festival.getDescription());
-    festivalResponse.setAddress(festival.getAddress());
-    festivalResponse.setCity(festival.getCity());
-    festivalResponse.setPostalCode(festival.getPostalCode());
-    festivalResponse.setCountry(festival.getCountry());
-    festivalResponse.setLatitude(festival.getLatitude());
-    festivalResponse.setLongitude(festival.getLongitude());
     festivalResponse.setStartDate(festival.getStartDate());
     festivalResponse.setEndDate(festival.getEndDate());
     festivalResponse.setGenre(festival.getGenre());
+
+    if (festival.getAddress() != null) {
+      Address address = festival.getAddress();
+      festivalResponse.setAddress(
+          AddressResponse.builder()
+              .id(address.getId())
+              .latitude(address.getLatitude())
+              .longitude(address.getLongitude())
+              .addressLine(address.getAddressLine())
+              .postalCode(address.getPostalCode())
+              .city(address.getCity())
+              .country(address.getCountry())
+              .build());
+    }
     return festivalResponse;
   }
 
@@ -30,12 +40,6 @@ public class FestivalMapper {
     Festival festival = new Festival();
     festival.setName(festivalRequest.getName());
     festival.setDescription(festivalRequest.getDescription());
-    festival.setAddress(festivalRequest.getAddress());
-    festival.setCity(festivalRequest.getCity());
-    festival.setPostalCode(festivalRequest.getPostalCode());
-    festival.setCountry(festivalRequest.getCountry());
-    festival.setLatitude(festivalRequest.getLatitude());
-    festival.setLongitude(festivalRequest.getLongitude());
     festival.setStartDate(festivalRequest.getStartDate());
     festival.setEndDate(festivalRequest.getEndDate());
     festival.setGenre(festivalRequest.getGenre());

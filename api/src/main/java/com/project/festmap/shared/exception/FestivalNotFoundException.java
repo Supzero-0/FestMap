@@ -9,4 +9,8 @@ public class FestivalNotFoundException extends RuntimeException {
   public FestivalNotFoundException(String message) {
     super(message);
   }
+
+  public FestivalNotFoundException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }
