@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-remove-address-columns-from-festival
+      author: supzero
+      changes:
+        - dropColumn:
+            tableName: festival
+            columnName: city
+        - dropColumn:
+            tableName: festival
+            columnName: country
+        - dropColumn:
+            tableName: festival
+            columnName: postal_code
+        - dropColumn:
+            tableName: festival
+            columnName: address
+        - dropColumn:
+            tableName: festival
+            columnName: latitude
+        - dropColumn:
+            tableName: festival
+            columnName: longitude
