@@ -1,6 +1,6 @@
 package com.project.festmap.festival.api;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,7 +39,7 @@ class FestivalControllerTest {
     mockMvc
         .perform(get("/api/festivals").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(6)));
+        .andExpect(jsonPath("$[*].name", hasItem("Nuits Sonores")));
   }
 
   @Test

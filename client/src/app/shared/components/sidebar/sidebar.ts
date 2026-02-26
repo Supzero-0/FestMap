@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../features/auth/services/auth-service';
 import { AuthModalService } from '../../../features/auth/services/auth-modal';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, ButtonModule, RouterLink],
+  imports: [CommonModule, ButtonModule],
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss'],
 })

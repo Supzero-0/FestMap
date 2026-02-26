@@ -1,22 +1,14 @@
 import { AfterViewInit, Component, DestroyRef, inject, OnDestroy } from '@angular/core';
-import * as L from 'leaflet';
+import type {
+  Map as LeafletMap,
+  Marker as LeafletMarker,
+  FeatureGroup as LeafletFeatureGroup,
+} from 'leaflet';
+
 import { Festival } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { FestivalService } from '../../services/festival-service';
-
-const DefaultIcon = L.icon({
-  iconRetinaUrl: 'leaflet/marker-icon-2x.png',
-  iconUrl: 'leaflet/marker-icon.png',
-  shadowUrl: 'leaflet/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
-  shadowSize: [41, 41],
-});
-
-(L.Marker as any).prototype.options.icon = DefaultIcon;
 
 @Component({
   selector: 'app-festival-map',
@@ -29,71 +21,113 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly messageService = inject(MessageService);
 
-  private map!: L.Map;
-  private markersGroup = L.featureGroup();
-  private markersById = new Map<number, L.Marker>();
+  private L!: typeof import('leaflet');
+
+  private map!: LeafletMap;
+  private markersGroup!: LeafletFeatureGroup;
+  private markersById = new Map<number, LeafletMarker>();
+
+  private static leafletPromise?: Promise<typeof import('leaflet')>;
+
+  private async loadLeaflet(): Promise<typeof import('leaflet')> {
+    if (!FestivalMap.leafletPromise) {
+      FestivalMap.leafletPromise = import('leaflet');
+    }
+    return FestivalMap.leafletPromise;
+  }
 
   ngAfterViewInit(): void {
-    this.initMap();
+    void this.bootstrap();
+  }
 
-    // Abonnenement aux données (Observables)
-    this.festivalService
-      .getAll$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (festivals) => this.renderMarkers(festivals),
-        error: (err) => {
-          console.error('[FestivalMap] getAll$ error:', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: 'Impossible de charger les festivals.',
-          });
-        },
+  private async bootstrap(): Promise<void> {
+    try {
+      this.L = await this.loadLeaflet();
+
+      this.setupDefaultMarkerIcon();
+      this.initMap();
+
+      this.festivalService
+        .getAll$()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (festivals) => this.renderMarkers(festivals),
+          error: (err) => {
+            console.error('[FestivalMap] getAll$ error:', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Impossible de charger les festivals.',
+            });
+          },
+        });
+
+      setTimeout(() => this.map.invalidateSize(), 0);
+    } catch (e) {
+      console.error('[FestivalMap] Leaflet load/init error:', e);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: "Impossible d'initialiser la carte.",
       });
+    }
+  }
 
-    setTimeout(() => this.map.invalidateSize(), 0);
+  private setupDefaultMarkerIcon(): void {
+    const DefaultIcon = this.L.icon({
+      iconRetinaUrl: 'leaflet/marker-icon-2x.png',
+      iconUrl: 'leaflet/marker-icon.png',
+      shadowUrl: 'leaflet/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41],
+    });
+
+    (this.L.Marker as any).prototype.options.icon = DefaultIcon;
   }
 
   private initMap(): void {
-    this.map = L.map('festivalMap', {
+    this.map = this.L.map('festivalMap', {
       center: [46.8, 2.5],
       zoom: 6,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
+    this.markersGroup = this.L.featureGroup();
     this.markersGroup.addTo(this.map);
   }
 
   private renderMarkers(festivals: Festival[]): void {
+    if (!this.markersGroup) return;
+
     this.markersGroup.clearLayers();
     this.markersById.clear();
 
-    // Création des marqueurs
     festivals?.forEach((f) => {
       if (f.latitude == null || f.longitude == null) return;
 
-      const marker = L.marker([f.latitude, f.longitude], {
+      const marker = this.L.marker([f.latitude, f.longitude], {
         title: f.name,
         alt: f.name,
       }).bindPopup(`
-        <section data-testid="festival-popup-${f.id}">
-          <strong>${f.name}</strong>
-          <br>${f.city}
-        </section>
-      `);
+          <section data-testid="festival-popup-${f.id}">
+            <strong>${f.name}</strong>
+            <br>${f.city}
+          </section>
+        `);
 
-      // Attribution d'un data-testid
       marker.on('add', () => {
         const elem = marker.getElement();
         if (elem) elem.setAttribute('data-testid', `festival-marker-${f.id}`);
       });
 
       this.markersGroup.addLayer(marker);
-      this.markersById.set(f.id, marker);
+      this.markersById.set(f.id, marker as unknown as LeafletMarker);
     });
 
     const count = (this.markersGroup.getLayers() || []).length;
@@ -102,29 +136,26 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Recentre la map et ouvre la popup du marqueur correspondant
-  focusMarker(id: number) {
-    // Récupération du marker et des coordonnées
+  focusMarker(id: number): void {
     const marker = this.markersById.get(id);
-    if (!marker) return;
+    if (!marker || !this.map) return;
+
     const ll = marker.getLatLng();
-    // Gestion de l'animation et du zoom
     this.map.stop();
     const targetZoom = Math.max(this.map.getZoom(), 9);
     this.map.flyTo(ll, targetZoom, { animate: true, duration: 0.4, easeLinearity: 0.25 });
-    // Affichage de la pop-up
     marker.openPopup();
   }
 
   ngOnDestroy(): void {
     try {
       if (this.map) {
-        this.markersGroup.clearLayers();
+        this.markersGroup?.clearLayers();
         this.map.off();
         this.map.remove();
       }
     } catch {
-      // safe-guard: ne rien faire si déjà nettoyé
+      // safe-guard
     }
   }
 }
