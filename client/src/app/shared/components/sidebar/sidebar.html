@@ -1,0 +1,59 @@
+<aside class="border-r border-fest-border-subtle flex flex-col justify-between p-4 h-full">
+  <div>
+    <div class="mb-8">
+      <span class="block font-heading text-xl text-fest-orange tracking-wide"> FestMap </span>
+      <span class="block text-xs text-fest-text/60"> Every festival. On one map. </span>
+    </div>
+
+    <nav class="space-y-2 text-sm">
+      <button
+        class="w-full text-left px-3 py-2 rounded-lg bg-fest-violet-neon text-fest-text hover:bg-fest-magenta transition-colors"
+      >
+        Accueil
+      </button>
+      <button
+        class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
+      >
+        Favoris
+      </button>
+      <button
+        class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
+      >
+        Calendrier
+      </button>
+    </nav>
+  </div>
+
+  <div class="mt-8 pt-4 border-t border-fest-border-subtle">
+    <p-button
+      *ngIf="!isAuthenticated(); else loggedInContent"
+      (onClick)="openLoginModal()"
+      styleClass="w-full p-button-secondary"
+    >
+      <ng-template pTemplate="content">
+        <div class="flex items-center gap-2 w-full">
+          <div
+            class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"
+          ></div>
+          <span class="flex-grow text-sm text-left">Se connecter</span>
+        </div>
+      </ng-template>
+    </p-button>
+
+    <ng-template #loggedInContent>
+      <p-button (onClick)="logout()" styleClass="w-full p-button-danger">
+        <ng-template pTemplate="content">
+          <div class="flex items-center gap-2 w-full">
+            <div
+              class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"
+            ></div>
+            <div class="flex flex-col flex-grow text-left">
+              <span class="text-sm">{{ getUserEmail() }}</span>
+              <span class="text-xs opacity-70">Se déconnecter</span>
+            </div>
+          </div>
+        </ng-template>
+      </p-button>
+    </ng-template>
+  </div>
+</aside>

@@ -98,6 +98,42 @@ GitHub Actions vérifie automatiquement :
 
 ➡️ Le merge est bloqué si la qualité échoue ✅
 
+## 📊 Diagramme de déploiement
+Consultez le [diagramme de déploiement](DEPLOYMENT_DIAGRAM.md) pour une vue d'ensemble de l'infrastructure.
+
+## 🚀 Production
+
+### URLs des applications
+
+Voici les URLs où les applications sont déployées.
+
+*   **Frontend (Vercel):** https://fest-map-ml.vercel.app/
+*   **API (Render):** https://festmap.onrender.com/
+
+### Variables d'environnement nécessaires
+
+Le déploiement en production nécessite la configuration de variables d'environnement spécifiques sur Vercel et Render. Celles-ci incluent généralement :
+
+*   `DATABASE_URL`: L'URL de connexion à la base de données PostgreSQL.
+*   `JWT_SECRET`: Une clé secrète pour la signature des jetons JWT.
+*   `FRONTEND_URL`: L'URL de l'application frontend (pour la configuration CORS côté API).
+*   Et toute autre clé API ou secret nécessaire aux services.
+
+### Déploiement
+
+Le déploiement en production est automatisé via **GitHub Actions**.
+
+*   Lors d'un push sur la branche `main` (ou d'une Pull Request mergée), les workflows CI/CD sont déclenchés.
+*   L'application **Frontend** est déployée sur **Vercel**.
+*   L'application **Backend** est déployée sur **Render**.
+
+## 🔐 Authentification
+
+### Comment s'inscrire et se connecter
+
+1.  **Inscription (Register):** Les utilisateurs peuvent créer un nouveau compte en fournissant une adresse e-mail et un mot de passe via l'interface du frontend. Le frontend envoie ces informations à l'API pour créer un nouvel utilisateur dans la base de données.
+2.  **Connexion (Login):** Une fois inscrit, l'utilisateur peut se connecter en utilisant son adresse e-mail et son mot de passe. L'API valide ces identifiants et, en cas de succès, retourne un jeton d'authentification (JWT). Ce jeton est ensuite stocké côté client et utilisé pour toutes les requêtes authentifiées ultérieures à l'API.
+
 ## 📌 Workflow collaboratif
 
 - Issues :
@@ -110,7 +146,7 @@ GitHub Actions vérifie automatiquement :
 
 ## 🧹 Commandes utiles
 
-```
+```bash
 # Lancer l’app
 docker compose up -d --build
 

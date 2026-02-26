@@ -1,0 +1,43 @@
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  appendTo="body"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="header">
+    <h3>Authentification</h3>
+  </ng-template>
+
+  <p-tabs [value]="activeIndex" (valueChange)="onTabValueChange($event)">
+    <p-tablist>
+      <p-tab [value]="0">Login</p-tab>
+      <p-tab [value]="1">Register</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <p-tabpanel [value]="0">
+        <app-login-form></app-login-form>
+      </p-tabpanel>
+
+      <p-tabpanel [value]="1">
+        <app-register-form></app-register-form>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-between w-full">
+      <p-button
+        [label]="activeIndex === 0 ? 'Login' : 'Register'"
+        [icon]="activeIndex === 0 ? 'pi pi-sign-in' : 'pi pi-user-plus'"
+        (onClick)="submitForm()"
+        styleClass="p-button-primary mr-2"
+      ></p-button>
+
+      <p-button label="Close" icon="pi pi-times" (onClick)="onHide()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

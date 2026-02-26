@@ -1,0 +1,31 @@
+<form [formGroup]="loginForm" class="p-4">
+  <div class="flex flex-col gap-4">
+    <div class="p-field flex flex-col">
+      <label for="email" class="mb-2 text-sm font-medium text-gray-700">Email</label>
+      <input pInputText id="email" type="email" formControlName="email" class="w-full" />
+      <div
+        *ngIf="
+          loginForm.get('email')?.invalid &&
+          (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</div>
+      </div>
+    </div>
+    <div class="p-field flex flex-col">
+      <label for="password" class="mb-2 text-sm font-medium text-gray-700">Password</label>
+      <input pInputText id="password" type="password" formControlName="password" class="w-full" />
+      <div
+        *ngIf="
+          loginForm.get('password')?.invalid &&
+          (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</div>
+      </div>
+    </div>
+  </div>
+</form>
