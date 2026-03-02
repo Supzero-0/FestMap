@@ -1,0 +1,21 @@
+<!-- Colonne 2 : Search + Liste -->
+<section
+  class="border-r border-fest-border-subtle flex flex-col p-4 gap-4 h-screen bg-fest-surface"
+>
+  <!-- Barre de recherche -->
+  <div>
+    <label class="block text-xs uppercase tracking-wide text-fest-text/60 mb-1">
+      Rechercher un festival
+    </label>
+    <input
+      type="text"
+      placeholder="Nom, ville, genre..."
+      class="w-full rounded-lg bg-fest-bg border border-fest-border-subtle px-3 py-2 text-sm placeholder:text-fest-text/40 focus:outline-none focus:ring-2 focus:ring-fest-magenta"
+    />
+  </div>
+
+  <!-- Liste des festivals -->
+  <div class="flex-1 overflow-y-auto">
+    <app-festival-list (selectFestival)="onSelectFestival($event)"></app-festival-list>
+  </div>
+</section>
