@@ -1,4 +1,4 @@
-package com.project.festmap.common.exception;
+package com.project.festmap.shared.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

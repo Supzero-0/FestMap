@@ -25,7 +25,7 @@ import com.project.festmap.address.domain.Address;
 import com.project.festmap.address.domain.AddressRepository;
 import com.project.festmap.address.dto.AddressRequest;
 import com.project.festmap.address.dto.AddressResponse;
-import com.project.festmap.common.exception.ResourceNotFoundException;
+import com.project.festmap.shared.exception.ResourceNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AddressService Tests")

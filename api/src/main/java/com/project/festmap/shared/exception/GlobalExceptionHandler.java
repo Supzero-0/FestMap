@@ -10,8 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.festmap.common.exception.ResourceNotFoundException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
