@@ -38,7 +38,7 @@ public class FestivalService {
   }
 
   public List<FestivalResponse> getAllFestivals() {
-    return festivalRepository.findAll().stream()
+    return festivalRepository.findAllWithAddress().stream()
         .map(festivalMapper::toFestivalResponse)
         .collect(Collectors.toList());
   }

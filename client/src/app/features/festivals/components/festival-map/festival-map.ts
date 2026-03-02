@@ -93,7 +93,7 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     this.markersById.clear();
 
     festivals?.forEach((f) => {
-      if (f.latitude == null || f.longitude == null) return;
+      if (f.address.latitude == null || f.address.longitude == null) return;
 
       const customIcon = this.L.divIcon({
         className: 'custom-marker-icon',
@@ -104,14 +104,14 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         tooltipAnchor: [16, -28],
       });
 
-      const marker = this.L.marker([f.latitude, f.longitude], {
+      const marker = this.L.marker([f.address.latitude, f.address.longitude], {
         title: f.name,
         alt: f.name,
         icon: customIcon,
       }).bindPopup(`
           <section data-testid="festival-popup-${f.id}">
             <strong>${f.name}</strong>
-            <br>${f.city}
+            <br>${f.address.city}
           </section>
         `);
 
