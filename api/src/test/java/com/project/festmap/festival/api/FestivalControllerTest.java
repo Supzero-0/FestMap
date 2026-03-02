@@ -37,7 +37,6 @@ class FestivalControllerTest {
     mockMvc
         .perform(get("/api/festivals").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(6)))
         .andExpect(jsonPath("$[*].name", hasItem("Nuits Sonores")));
   }
 

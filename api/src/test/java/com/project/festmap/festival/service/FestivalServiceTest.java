@@ -115,7 +115,7 @@ public class FestivalServiceTest {
   public void getAllFestivals_shouldReturnFestivalResponseList() {
     // Arrange
     List<Festival> festivals = Collections.singletonList(festival);
-    when(festivalRepository.findAll()).thenReturn(festivals);
+    when(festivalRepository.findAllWithAddress()).thenReturn(festivals);
     when(festivalMapper.toFestivalResponse(any(Festival.class))).thenReturn(festivalResponse);
 
     // Act
