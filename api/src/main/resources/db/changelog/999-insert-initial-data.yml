@@ -1,0 +1,119 @@
+databaseChangeLog:
+  - changeSet:
+      id: 999-insert-initial-data
+      author: supzero
+      changes:
+        # Les Vieilles Charrues
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "48.275" }
+              - column: { name: longitude, value: "-3.575" }
+              - column: { name: address_line, value: "Site de Kerampuil" }
+              - column: { name: postal_code, value: "29270" }
+              - column: { name: city, value: "Carhaix-Plouguer" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Les Vieilles Charrues" }
+              - column: { name: description, value: "Le plus grand festival de France en plein cœur de la Bretagne." }
+              - column: { name: start_date, value: "2026-07-17" }
+              - column: { name: end_date, value: "2026-07-20" }
+              - column: { name: genre, value: "Pop/Rock" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 48.275 AND longitude = -3.575)" }
+        # Rock en Seine
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "48.845" }
+              - column: { name: longitude, value: "2.222" }
+              - column: { name: address_line, value: "Domaine National de Saint-Cloud" }
+              - column: { name: postal_code, value: "92210" }
+              - column: { name: city, value: "Saint-Cloud (Paris)" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Rock en Seine" }
+              - column: { name: description, value: "Le dernier grand rendez-vous rock de l'été aux portes de Paris." }
+              - column: { name: start_date, value: "2026-08-22" }
+              - column: { name: end_date, value: "2026-08-25" }
+              - column: { name: genre, value: "Rock/Indé" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 48.845 AND longitude = 2.222)" }
+        # Garorock
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "44.503" }
+              - column: { name: longitude, value: "0.163" }
+              - column: { name: address_line, value: "Plaine de la Filhole" }
+              - column: { name: postal_code, value: "47200" }
+              - column: { name: city, value: "Marmande" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Garorock" }
+              - column: { name: description, value: "Un des plus anciens festivals du Sud-Ouest, entre rock, électro et pop." }
+              - column: { name: start_date, value: "2026-06-27" }
+              - column: { name: end_date, value: "2026-06-30" }
+              - column: { name: genre, value: "Multi" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 44.503 AND longitude = 0.163)" }
+        # Les Eurockéennes
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "47.669" }
+              - column: { name: longitude, value: "6.852" }
+              - column: { name: address_line, value: "Presqu'île du Malsaucy" }
+              - column: { name: postal_code, value: "90300" }
+              - column: { name: city, value: "Belfort" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Les Eurockéennes" }
+              - column: { name: description, value: "Un festival engagé sur une presqu'île, au bord de l'eau." }
+              - column: { name: start_date, value: "2026-07-05" }
+              - column: { name: end_date, value: "2026-07-08" }
+              - column: { name: genre, value: "Rock" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 47.669 AND longitude = 6.852)" }
+        # Hellfest
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "47.087" }
+              - column: { name: longitude, value: "-1.283" }
+              - column: { name: address_line, value: "Rue du Champ Louet" }
+              - column: { name: postal_code, value: "44190" }
+              - column: { name: city, value: "Clisson" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Hellfest" }
+              - column: { name: description, value: "Le rendez-vous incontournable des fans de musiques extrêmes." }
+              - column: { name: start_date, value: "2026-06-21" }
+              - column: { name: end_date, value: "2026-06-25" }
+              - column: { name: genre, value: "Metal" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 47.087 AND longitude = -1.283)" }
+        # Nuits Sonores
+        - insert:
+            tableName: address
+            columns:
+              - column: { name: latitude, value: "45.757" }
+              - column: { name: longitude, value: "4.835" }
+              - column: { name: address_line, value: "Divers lieux dans Lyon" }
+              - column: { name: postal_code, value: "69000" }
+              - column: { name: city, value: "Lyon" }
+              - column: { name: country, value: "France" }
+        - insert:
+            tableName: festival
+            columns:
+              - column: { name: name, value: "Nuits Sonores" }
+              - column: { name: description, value: "Un festival urbain dédié aux cultures électroniques et indépendantes." }
+              - column: { name: start_date, value: "2026-05-25" }
+              - column: { name: end_date, value: "2026-05-30" }
+              - column: { name: genre, value: "Electro" }
+              - column: { name: address_id, valueComputed: "(SELECT id FROM address WHERE latitude = 45.757 AND longitude = 4.835)" }

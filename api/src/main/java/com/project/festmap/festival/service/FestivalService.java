@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.project.festmap.address.domain.Address;
+import com.project.festmap.address.service.AddressService;
 import com.project.festmap.festival.domain.Festival;
 import com.project.festmap.festival.domain.FestivalRepository;
 import com.project.festmap.festival.dto.FestivalRequest;
@@ -17,10 +19,15 @@ public class FestivalService {
 
   private final FestivalRepository festivalRepository;
   private final FestivalMapper festivalMapper;
+  private final AddressService addressService;
 
-  public FestivalService(FestivalRepository festivalRepository, FestivalMapper festivalMapper) {
+  public FestivalService(
+      FestivalRepository festivalRepository,
+      FestivalMapper festivalMapper,
+      AddressService addressService) {
     this.festivalRepository = festivalRepository;
     this.festivalMapper = festivalMapper;
+    this.addressService = addressService;
   }
 
   public FestivalResponse getFestivalById(Long id) {
@@ -31,7 +38,7 @@ public class FestivalService {
   }
 
   public List<FestivalResponse> getAllFestivals() {
-    return festivalRepository.findAll().stream()
+    return festivalRepository.findAllWithAddress().stream()
         .map(festivalMapper::toFestivalResponse)
         .collect(Collectors.toList());
   }
@@ -47,7 +54,10 @@ public class FestivalService {
       throw new IllegalArgumentException("End date cannot be before start date.");
     }
 
+    Address address = addressService.createAddress(festivalRequest.getAddress());
+
     Festival festival = festivalMapper.toFestivalEntity(festivalRequest);
+    festival.setAddress(address);
     festival = festivalRepository.save(festival);
     return festivalMapper.toFestivalResponse(festival);
   }
@@ -59,21 +69,26 @@ public class FestivalService {
             .orElseThrow(
                 () -> new FestivalNotFoundException("Festival with id " + id + " not found."));
 
+    addressService.updateAddress(festival.getAddress().getId(), festivalRequest.getAddress());
+
     festival.setName(festivalRequest.getName());
-    festival.setCity(festivalRequest.getCity());
+    festival.setDescription(festivalRequest.getDescription());
     festival.setStartDate(festivalRequest.getStartDate());
     festival.setEndDate(festivalRequest.getEndDate());
-    festival.setLatitude(festivalRequest.getLatitude());
-    festival.setLongitude(festivalRequest.getLongitude());
+    festival.setGenre(festivalRequest.getGenre());
 
     festival = festivalRepository.save(festival);
     return festivalMapper.toFestivalResponse(festival);
   }
 
   public void deleteFestival(Long id) {
-    if (!festivalRepository.existsById(id)) {
-      throw new FestivalNotFoundException("Festival with id " + id + " not found.");
-    }
-    festivalRepository.deleteById(id);
+    Festival festival =
+        festivalRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new FestivalNotFoundException("Festival with id " + id + " not found."));
+
+    festivalRepository.delete(festival);
+    addressService.deleteAddress(festival.getAddress().getId());
   }
 }

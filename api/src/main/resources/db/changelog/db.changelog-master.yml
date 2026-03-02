@@ -2,6 +2,12 @@ databaseChangeLog:
   - include:
       file: db/changelog/001-create-festival-table.yml
   - include:
-      file: db/changelog/002-insert-festival-data.yml
+      file: db/changelog/002-create-user-table.yml
   - include:
-      file: db/changelog/003-create-user-table.yml
+      file: db/changelog/003-create-address-table.yml
+  - include:
+      file: db/changelog/004-alter-festival-add-address-id.yml
+  - include:
+      file: db/changelog/005-remove-address-columns-from-festival.yml
+  - include:
+      file: db/changelog/999-insert-initial-data.yml

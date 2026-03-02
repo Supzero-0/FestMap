@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 003-create-user-table
+      id: 002-create-user-table
       author: supzero
       changes:
         - createTable:

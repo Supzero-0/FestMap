@@ -1,46 +1,44 @@
 <aside class="list" data-testid="festival-list">
-  <h2 class="text-fest-orange">Liste des festivals</h2>
+  <div class="flex flex-col h-full">
+    <h2 class="text-fest-orange sticky top-0 z-10 bg-fest-surface px-4 pb-4">
+      Liste des festivals
+    </h2>
 
-  <ng-container *ngIf="vm$ | async as vm">
-    <!-- Error -->
-    <p *ngIf="vm.error; else ok" role="alert" aria-live="polite">
-      {{ vm.error }}
-    </p>
+    <div class="flex-1 overflow-y-auto">
+      <ng-container *ngIf="vm$ | async as vm">
+        <!-- Error -->
+        <p *ngIf="vm.error; else ok" role="alert" aria-live="polite">
+          {{ vm.error }}
+        </p>
 
-    <!-- Ok -->
-    <ng-template #ok>
-      <!-- Loading -->
-      <p *ngIf="vm.loading; else dataTpl" class="loading" aria-busy="true">Chargement...</p>
+        <!-- Ok -->
+        <ng-template #ok>
+          <!-- Loading -->
+          <p *ngIf="vm.loading; else dataTpl" class="loading" aria-busy="true">Chargement...</p>
 
-      <!-- Data -->
-      <ng-template #dataTpl>
-        <ul *ngIf="vm.data.length; else empty" aria-busy="false">
-          <li
-            *ngFor="let f of vm.data; trackBy: trackById"
-            class="item"
-            role="button"
-            tabindex="0"
-            (click)="onSelect(f.id)"
-            (keyup.enter)="onSelect(f.id)"
-            [attr.data-testid]="`festival-list-item-` + f.id"
-            [attr.aria-label]="`Sélectionner ` + f.name + ` à ` + f.city"
-          >
-            <strong>{{ f.name }}</strong>
-            <span class="city">{{ f.city }}</span>
-            <small>({{ f.genre }})</small>
-            <button
-              (click)="onDelete(f.id, $event)"
-              [attr.data-testid]="`delete-festival-list-item-` + f.id"
+          <!-- Data -->
+          <ng-template #dataTpl>
+            <ul
+              *ngIf="vm.data.length; else empty"
+              aria-busy="false"
+              class="grid gap-4 rounded-lg bg-fest-bg p-4"
             >
-              Supprimer
-            </button>
-          </li>
-        </ul>
-      </ng-template>
-    </ng-template>
+              <li *ngFor="let f of vm.data; trackBy: trackById" class="w-full">
+                <app-festival-card
+                  [festival]="f"
+                  (selectFestival)="onSelect(f.id)"
+                  (deleteFestival)="onDelete($event)"
+                  (toggleFavorite)="onToggleFavorite(f.id)"
+                ></app-festival-card>
+              </li>
+            </ul>
+          </ng-template>
+        </ng-template>
 
-    <ng-template #empty>
-      <p data-testid="festival-list-empty">Aucun festival</p>
-    </ng-template>
-  </ng-container>
+        <ng-template #empty>
+          <p data-testid="festival-list-empty">Aucun festival</p>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
 </aside>

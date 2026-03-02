@@ -27,11 +27,24 @@ public class FestivalController {
     return festivalService.getAllFestivals();
   }
 
+  @GetMapping("/festivals/{id}")
+  public ResponseEntity<FestivalResponse> getFestivalById(@PathVariable Long id) {
+    FestivalResponse festivalResponse = festivalService.getFestivalById(id);
+    return ResponseEntity.ok(festivalResponse);
+  }
+
   @PostMapping("/festivals")
   public ResponseEntity<FestivalResponse> createFestival(
       @Valid @RequestBody FestivalRequest festivalRequest) {
     FestivalResponse festivalResponse = festivalService.createFestival(festivalRequest);
     return new ResponseEntity<>(festivalResponse, HttpStatus.CREATED);
+  }
+
+  @PutMapping("/festivals/{id}")
+  public ResponseEntity<FestivalResponse> updateFestival(
+      @PathVariable Long id, @Valid @RequestBody FestivalRequest festivalRequest) {
+    FestivalResponse festivalResponse = festivalService.updateFestival(id, festivalRequest);
+    return ResponseEntity.ok(festivalResponse);
   }
 
   @DeleteMapping("/festivals/{id}")
