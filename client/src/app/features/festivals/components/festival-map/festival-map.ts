@@ -97,23 +97,95 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
       const customIcon = this.L.divIcon({
         className: 'custom-marker-icon',
-        html: `<div data-testid="festival-marker-${f.id}" style="width: 25px; height: 41px; background-image: url('leaflet/marker-icon.png'); background-size: contain;"></div>`,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        tooltipAnchor: [16, -28],
+        html: `<div
+            data-testid="festival-marker-${f.id}"
+            class="w-7 h-7 rounded-full grid place-items-center
+            bg-fest-violet-neon border-2 border-white shadow-lg shadow-black/20">
+              <i class="pi pi-map-marker text-white text-sm leading-none translate-x-[0.75px]"></i>
+          </div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [0, -12],
+        tooltipAnchor: [12, -12],
       });
+
+      const popup = this.L.popup({
+        closeButton: false,
+        minWidth: 200,
+        className: 'festmap-popup',
+      });
+
+      const popupContent = (() => {
+        const formatDate = (dateString: string) => {
+          const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+          };
+          return new Date(dateString).toLocaleDateString(undefined, options);
+        };
+
+        let descriptionHtml = '';
+        if (f.description) {
+          descriptionHtml = `<p class="text-fest-text/70 text-sm line-clamp-2 mb-3">${f.description}</p>`;
+        }
+
+        let genreHtml = '';
+        if (f.genre) {
+          genreHtml = `<span class="ml-auto px-2 py-0.5 bg-fest-bg rounded-full">${f.genre}</span>`;
+        }
+
+        return `
+          <div
+            class="bg-fest-surface rounded-lg shadow-md overflow-hidden flex flex-col relative"
+            data-testid="festival-card-${f.id}"
+          >
+            <button id="customCloseButton-${f.id}"
+              type="button"
+              aria-label="Fermer"
+              class="absolute top-3 right-3 z-10 grid place-items-center
+                    w-9 h-9 rounded-full
+                    bg-fest-bg/70 backdrop-blur
+                    ring-1 ring-white/10
+                    text-fest-text/80
+                    hover:bg-fest-bg hover:text-fest-text
+                    transition"
+            >
+              <i class="pi pi-times text-sm leading-none"></i>
+            </button>
+            <div class="p-4 flex-1">
+              <h3 class="font-semibold text-lg text-fest-text mb-1 pr-8">${f.name}</h3>
+              <p class="text-sm text-fest-text/80 mb-2">
+                ${f.address.city}, ${f.address.country}
+              </p>
+              ${descriptionHtml}
+              <div class="flex items-center text-xs text-fest-text/60 mb-3">
+                <i class="pi pi-calendar mr-1"></i>
+                <span>${formatDate(f.startDate)} - ${formatDate(f.endDate)}</span>
+                ${genreHtml}
+              </div>
+            </div>
+          </div>
+        `;
+      })();
+
+      popup.setContent(popupContent);
 
       const marker = this.L.marker([f.address.latitude, f.address.longitude], {
         title: f.name,
         alt: f.name,
         icon: customIcon,
-      }).bindPopup(`
-          <section data-testid="festival-popup-${f.id}">
-            <strong>${f.name}</strong>
-            <br>${f.address.city}
-          </section>
-        `);
+      }).bindPopup(popup);
+
+      popup.on('add', () => {
+        const closeButton = popup.getElement()?.querySelector(`#customCloseButton-${f.id}`);
+        if (closeButton) {
+          closeButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            this.map.closePopup();
+          });
+        }
+      });
 
       this.markersGroup.addLayer(marker);
       this.markersById.set(f.id, marker as unknown as LeafletMarker);

@@ -106,3 +106,23 @@
 .p-focus {
   outline-color: var(--fest-orange);
 }
+
+/* Enlève le fond/padding blancs du wrapper Leaflet */
+.leaflet-popup.festmap-popup .leaflet-popup-content-wrapper {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Enlève la marge par défaut autour du contenu */
+.leaflet-popup.festmap-popup .leaflet-popup-content {
+  margin: 0;
+}
+
+/* Enlève le triangle (tip) */
+.leaflet-popup.festmap-popup .leaflet-popup-tip {
+  background: transparent;
+  box-shadow: none;
+  display: none;
+}
