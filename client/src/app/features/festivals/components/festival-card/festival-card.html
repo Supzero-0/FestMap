@@ -1,0 +1,57 @@
+<div
+  class="bg-fest-surface rounded-lg shadow-md overflow-hidden flex flex-col cursor-pointer hover:shadow-lg transition-shadow duration-300 ease-in-out"
+  [attr.data-testid]="'festival-card-' + festival.id"
+  (click)="onSelect($event)"
+>
+  <div class="p-4 flex-1">
+    <h3 class="font-semibold text-lg text-fest-text mb-1">{{ festival.name }}</h3>
+    <p class="text-sm text-fest-text/80 mb-2">
+      {{ festival.address.city }}, {{ festival.address.country }}
+    </p>
+    <p *ngIf="festival.description" class="text-fest-text/70 text-sm line-clamp-2 mb-3">
+      {{ festival.description }}
+    </p>
+    <div class="flex items-center text-xs text-fest-text/60 mb-3">
+      <i class="pi pi-calendar mr-1"></i>
+      <span
+        >{{ festival.startDate | date: 'shortDate' }} -
+        {{ festival.endDate | date: 'shortDate' }}</span
+      >
+      <span *ngIf="festival.genre" class="ml-auto px-2 py-0.5 bg-fest-bg rounded-full">{{
+        festival.genre
+      }}</span>
+    </div>
+  </div>
+
+  <div
+    class="border-t border-fest-border-subtle p-3 flex justify-between items-center bg-fest-surface"
+  >
+    <div class="flex gap-2">
+      <button
+        class="p-button-text p-button-sm p-button-rounded text-fest-violet hover:text-fest-magenta"
+        (click)="onToggleFavorite($event)"
+        [attr.data-testid]="'favorite-festival-button-' + festival.id"
+        title="Ajouter aux favoris"
+      >
+        <i class="pi pi-heart"></i>
+      </button>
+      <a
+        href="#"
+        target="_blank"
+        class="p-button-text p-button-sm p-button-rounded text-fest-violet hover:text-fest-magenta"
+        [attr.data-testid]="'website-link-' + festival.id"
+        title="Visiter le site web"
+      >
+        <i class="pi pi-globe"></i>
+      </a>
+    </div>
+    <button
+      (click)="onDelete($event)"
+      class="p-button-text p-button-sm p-button-rounded text-red-500 hover:text-red-600"
+      [attr.data-testid]="'delete-festival-button-' + festival.id"
+      title="Supprimer le festival"
+    >
+      <i class="pi pi-trash"></i>
+    </button>
+  </div>
+</div>

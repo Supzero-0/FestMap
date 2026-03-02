@@ -4,6 +4,7 @@ import { Festival } from '../../types';
 import { catchError, map, of, startWith } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { FestivalService } from '../../services/festival-service';
+import { FestivalCard } from '../festival-card/festival-card';
 
 type Vm = {
   data: Festival[];
@@ -14,7 +15,7 @@ type Vm = {
 @Component({
   selector: 'app-festival-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, FestivalCard],
   templateUrl: './festival-list.html',
   styleUrl: './festival-list.scss',
 })
@@ -38,8 +39,12 @@ export class FestivalList {
     this.selectFestival.emit(id);
   }
 
-  onDelete(id: number, event: MouseEvent) {
-    event.stopPropagation();
+  onDelete(id: number) {
     this.festivalService.delete$(id).subscribe();
+  }
+
+  onToggleFavorite(id: number) {
+    console.log(`Toggle favorite for festival with ID: ${id}`);
+    // Implement actual favorite toggling logic here
   }
 }
