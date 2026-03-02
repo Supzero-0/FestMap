@@ -10,6 +10,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import com.project.festmap.common.exception.ResourceNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -70,6 +72,13 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleBadRequest(Exception ex) {
     var errorResponse = new ErrorResponse("Bad request");
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+  // Resource not found (e.g., Address, User)
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+    var errorResponse = new ErrorResponse(ex.getMessage());
+    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
   }
 
   // Par défaut -> 500
