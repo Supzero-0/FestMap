@@ -5,40 +5,39 @@
     </h2>
 
     <div class="flex-1 overflow-y-auto">
-      <ng-container *ngIf="vm$ | async as vm">
-        <!-- Error -->
-        <p *ngIf="vm.error; else ok" role="alert" aria-live="polite">
-          {{ vm.error }}
-        </p>
+      <!-- Error -->
+      <p *ngIf="error; else ok" role="alert" aria-live="polite">
+        {{ error }}
+      </p>
 
-        <!-- Ok -->
-        <ng-template #ok>
-          <!-- Loading -->
-          <p *ngIf="vm.loading; else dataTpl" class="loading" aria-busy="true">Chargement...</p>
+      <!-- Ok -->
+      <ng-template #ok>
+        <!-- Loading -->
+        <p *ngIf="loading; else dataTpl" class="loading" aria-busy="true">Chargement...</p>
 
-          <!-- Data -->
-          <ng-template #dataTpl>
-            <ul
-              *ngIf="vm.data.length; else empty"
-              aria-busy="false"
-              class="grid gap-4 rounded-lg bg-fest-bg p-4"
-            >
-              <li *ngFor="let f of vm.data; trackBy: trackById" class="w-full">
-                <app-festival-card
-                  [festival]="f"
-                  (selectFestival)="onSelect(f.id)"
-                  (deleteFestival)="onDelete($event)"
-                  (toggleFavorite)="onToggleFavorite(f.id)"
-                ></app-festival-card>
-              </li>
-            </ul>
-          </ng-template>
+        <!-- Data -->
+        <ng-template #dataTpl>
+          <ul
+            *ngIf="festivals.length; else empty"
+            aria-busy="false"
+            class="grid gap-4 rounded-lg bg-fest-bg p-4"
+          >
+            <li *ngFor="let f of festivals; trackBy: trackById" class="w-full">
+              <app-festival-card
+                [festival]="f"
+                [isSelected]="f.id === selectedFestivalId"
+                (selectFestival)="onSelect(f.id)"
+                (deleteFestival)="onDelete($event)"
+                (toggleFavorite)="onToggleFavorite(f.id)"
+              ></app-festival-card>
+            </li>
+          </ul>
         </ng-template>
+      </ng-template>
 
-        <ng-template #empty>
-          <p data-testid="festival-list-empty">Aucun festival</p>
-        </ng-template>
-      </ng-container>
+      <ng-template #empty>
+        <p data-testid="festival-list-empty">Aucun festival</p>
+      </ng-template>
     </div>
   </div>
 </aside>

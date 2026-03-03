@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, OnDestroy, NgZone } from '@angular/core';
 import type {
   Map as LeafletMap,
   Marker as LeafletMarker,
@@ -9,6 +9,7 @@ import { Festival } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { FestivalService } from '../../services/festival-service';
+import { FestivalSelection } from '../../services/festival-selection';
 
 @Component({
   selector: 'app-festival-map',
@@ -20,6 +21,8 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
   private readonly festivalService = inject(FestivalService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly messageService = inject(MessageService);
+  private readonly festivalSelection = inject(FestivalSelection);
+  private readonly ngZone = inject(NgZone);
 
   private L!: typeof import('leaflet');
 
@@ -50,7 +53,10 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         .getAll$()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (festivals) => this.renderMarkers(festivals),
+          next: (festivals) => {
+            this.renderMarkers(festivals);
+            this.subscribeToSelection();
+          },
           error: (err) => {
             console.error('[FestivalMap] getAll$ error:', err);
             this.messageService.add({
@@ -70,6 +76,18 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         detail: "Impossible d'initialiser la carte.",
       });
     }
+  }
+
+  private subscribeToSelection(): void {
+    this.festivalSelection.selectedFestivalId$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((id) => {
+        if (id !== null) {
+          this.focusMarker(id);
+        } else {
+          this.map.closePopup();
+        }
+      });
   }
 
   private initMap(): void {
@@ -177,6 +195,12 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         icon: customIcon,
       }).bindPopup(popup);
 
+      marker.on('click', () => {
+        this.ngZone.run(() => {
+          this.festivalSelection.selectFestival(f.id);
+        });
+      });
+
       popup.on('add', () => {
         const closeButton = popup.getElement()?.querySelector(`#customCloseButton-${f.id}`);
         if (closeButton) {
@@ -185,6 +209,14 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
             this.map.closePopup();
           });
         }
+      });
+
+      popup.on('remove', () => {
+        this.ngZone.run(() => {
+          if (this.festivalSelection.selectedFestivalId === f.id) {
+            this.festivalSelection.selectFestival(null);
+          }
+        });
       });
 
       this.markersGroup.addLayer(marker);
@@ -200,6 +232,8 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
   focusMarker(id: number): void {
     const marker = this.markersById.get(id);
     if (!marker || !this.map) return;
+
+    if (marker.isPopupOpen()) return;
 
     const ll = marker.getLatLng();
     this.map.stop();

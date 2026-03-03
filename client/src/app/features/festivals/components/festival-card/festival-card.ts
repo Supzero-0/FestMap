@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class FestivalCard {
   @Input({ required: true }) festival!: Festival;
+  @Input() isSelected: boolean = false;
   @Output() selectFestival = new EventEmitter<number>();
   @Output() deleteFestival = new EventEmitter<number>();
   @Output() toggleFavorite = new EventEmitter<number>();

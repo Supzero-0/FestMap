@@ -15,7 +15,7 @@
   </div>
 
   <!-- Liste des festivals -->
-  <div class="flex-1 overflow-y-auto">
+  <div #scrollContainer class="flex-1 overflow-y-auto">
     <app-festival-list (selectFestival)="onSelectFestival($event)"></app-festival-list>
   </div>
 </section>
