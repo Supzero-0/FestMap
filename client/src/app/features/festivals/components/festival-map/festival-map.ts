@@ -50,15 +50,14 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
       this.initMap();
 
       this.festivalService
-        .getAll$()
+        .getFiltered$()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (festivals) => {
             this.renderMarkers(festivals);
-            this.subscribeToSelection();
           },
           error: (err) => {
-            console.error('[FestivalMap] getAll$ error:', err);
+            console.error('[FestivalMap] getFiltered$ error:', err);
             this.messageService.add({
               severity: 'error',
               summary: 'Erreur',
@@ -66,6 +65,8 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
             });
           },
         });
+
+      this.subscribeToSelection();
 
       setTimeout(() => this.map.invalidateSize(), 0);
     } catch (e) {

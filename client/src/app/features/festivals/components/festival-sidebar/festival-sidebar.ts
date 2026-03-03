@@ -11,6 +11,8 @@ import {
 import { FestivalList } from '../../../../features/festivals/components/festival-list/festival-list';
 import { FestivalSelection } from '../../services/festival-selection';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FestivalService } from '../../services/festival-service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-festival-sidebar',
@@ -21,7 +23,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class FestivalSidebar implements OnInit {
   private readonly festivalSelection = inject(FestivalSelection);
+  private readonly festivalService = inject(FestivalService);
   private readonly destroyRef = inject(DestroyRef);
+
+  private readonly searchSubject = new Subject<string>();
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
   @Output() selectFestival = new EventEmitter<number>();
@@ -34,6 +39,17 @@ export class FestivalSidebar implements OnInit {
           this.scrollToTop();
         }
       });
+
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((query) => {
+        this.festivalService.setSearchQuery(query);
+      });
+  }
+
+  onSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchSubject.next(input.value);
   }
 
   onSelectFestival(festivalId: number) {

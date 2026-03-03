@@ -5,15 +5,16 @@ import {
   inject,
   Output,
   OnInit,
-  OnDestroy,
   ChangeDetectorRef,
+  DestroyRef,
 } from '@angular/core';
 import { Festival } from '../../types';
-import { catchError, finalize, map, of, Subscription, switchMap } from 'rxjs';
+import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { FestivalService } from '../../services/festival-service';
 import { FestivalCard } from '../festival-card/festival-card';
 import { FestivalSelection } from '../../services/festival-selection';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-festival-list',
@@ -22,12 +23,11 @@ import { FestivalSelection } from '../../services/festival-selection';
   templateUrl: './festival-list.html',
   styleUrl: './festival-list.scss',
 })
-export class FestivalList implements OnInit, OnDestroy {
+export class FestivalList implements OnInit {
   private readonly festivalService = inject(FestivalService);
   private readonly festivalSelection = inject(FestivalSelection);
   private readonly cdr = inject(ChangeDetectorRef);
-  private festivalSubscription: Subscription | undefined;
-  private selectedFestivalIdSubscription: Subscription | undefined;
+  private readonly destroyRef = inject(DestroyRef);
 
   @Output() selectFestival = new EventEmitter<number>();
 
@@ -41,9 +41,10 @@ export class FestivalList implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
 
-    this.festivalSubscription = this.festivalService
-      .getAll$()
+    this.festivalService
+      .getFiltered$()
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         map((data) => {
           this.originalFestivalsOrder = [...data];
           return data;
@@ -63,18 +64,13 @@ export class FestivalList implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       });
 
-    this.selectedFestivalIdSubscription = this.festivalSelection.selectedFestivalId$.subscribe(
-      (id) => {
+    this.festivalSelection.selectedFestivalId$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((id) => {
         this.selectedFestivalId = id;
         this.reorderFestivals();
         this.cdr.detectChanges();
-      },
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.festivalSubscription?.unsubscribe();
-    this.selectedFestivalIdSubscription?.unsubscribe();
+      });
   }
 
   reorderFestivals(): void {
@@ -107,10 +103,6 @@ export class FestivalList implements OnInit, OnDestroy {
       .delete$(id)
       .pipe(
         switchMap(() => this.festivalService.getAll$()),
-        map((data) => {
-          this.originalFestivalsOrder = [...data];
-          return data;
-        }),
         catchError((err) => {
           console.error(err);
           this.error = 'Impossible de supprimer le festival.';
@@ -120,10 +112,7 @@ export class FestivalList implements OnInit, OnDestroy {
           this.loading = false;
         }),
       )
-      .subscribe((data) => {
-        this.festivals = data;
-        this.reorderFestivals();
-      });
+      .subscribe();
   }
 
   onToggleFavorite(id: number) {
