@@ -13,6 +13,7 @@ import { FestivalSelection } from '../../services/festival-selection';
 
 @Component({
   selector: 'app-festival-map',
+  standalone: true,
   imports: [],
   templateUrl: './festival-map.html',
   styleUrl: './festival-map.scss',
@@ -234,13 +235,21 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     const marker = this.markersById.get(id);
     if (!marker || !this.map) return;
 
-    if (marker.isPopupOpen()) return;
-
     const ll = marker.getLatLng();
     this.map.stop();
     const targetZoom = Math.max(this.map.getZoom(), 9);
-    this.map.flyTo(ll, targetZoom, { animate: true, duration: 0.4, easeLinearity: 0.25 });
-    marker.openPopup();
+
+    // Zoom to marker
+    this.map.flyTo(ll, targetZoom, {
+      animate: true,
+      duration: 0.4,
+      easeLinearity: 0.25,
+    });
+
+    // Only open popup if not already open
+    if (!marker.isPopupOpen()) {
+      marker.openPopup();
+    }
   }
 
   ngOnDestroy(): void {
