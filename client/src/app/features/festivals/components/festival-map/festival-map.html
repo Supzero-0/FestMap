@@ -1,30 +1,147 @@
 <section class="p-4 bg-fest-bg overflow-hidden h-full">
   <div class="flex flex-col h-full gap-4">
-    <!-- Filtres -->
-    <header class="flex flex-wrap items-center gap-2 justify-between">
+    <header
+      class="flex flex-wrap items-center gap-2 justify-between relative z-20"
+      *ngIf="filters$ | async as activeFilters"
+    >
       <h1 class="font-heading text-xl text-fest-orange">Carte des festivals</h1>
-      <div class="flex flex-wrap gap-2 text-xs">
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Tous les genres
-        </button>
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Ce mois-ci
-        </button>
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Budget &lt; 100€
-        </button>
+      <div class="flex flex-wrap gap-2">
+        <!-- Dropdown Genres -->
+        <div class="relative">
+          <button
+            (click)="toggleDropdown('genre')"
+            class="px-3 py-1.5 rounded-lg bg-fest-surface border border-white/10 text-xs font-medium hover:bg-fest-surface/80 transition-colors flex items-center gap-2"
+          >
+            <span class="text-fest-text/60">Genre:</span>
+            <span class="text-fest-orange">{{ activeFilters.genre || 'Tous' }}</span>
+            <i
+              class="pi pi-chevron-down text-[10px] transition-transform"
+              [class.rotate-180]="activeDropdown === 'genre'"
+            ></i>
+          </button>
+
+          <div
+            *ngIf="activeDropdown === 'genre'"
+            class="absolute top-full left-0 mt-1 w-48 bg-fest-surface border border-white/10 rounded-lg shadow-xl z-50 py-1"
+          >
+            <button
+              (click)="setGenre(null)"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.genre === null"
+            >
+              Tous les genres
+            </button>
+            <button
+              *ngFor="let genre of availableGenres$ | async"
+              (click)="setGenre(genre)"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.genre === genre"
+            >
+              {{ genre }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropdown Dates -->
+        <div class="relative">
+          <button
+            (click)="toggleDropdown('date')"
+            class="px-3 py-1.5 rounded-lg bg-fest-surface border border-white/10 text-xs font-medium hover:bg-fest-surface/80 transition-colors flex items-center gap-2"
+          >
+            <span class="text-fest-text/60">Date:</span>
+            <span class="text-fest-orange">
+              {{
+                activeFilters.dateFilter === 'all'
+                  ? 'Toutes'
+                  : activeFilters.dateFilter === 'this-month'
+                    ? 'Ce mois-ci'
+                    : activeFilters.dateFilter === 'this-summer'
+                      ? 'Cet été'
+                      : '2026'
+              }}
+            </span>
+            <i
+              class="pi pi-chevron-down text-[10px] transition-transform"
+              [class.rotate-180]="activeDropdown === 'date'"
+            ></i>
+          </button>
+
+          <div
+            *ngIf="activeDropdown === 'date'"
+            class="absolute top-full left-0 mt-1 w-48 bg-fest-surface border border-white/10 rounded-lg shadow-xl z-50 py-1"
+          >
+            <button
+              (click)="setDateFilter('all')"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.dateFilter === 'all'"
+            >
+              Toutes les dates
+            </button>
+            <button
+              (click)="setDateFilter('this-month')"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.dateFilter === 'this-month'"
+            >
+              Ce mois-ci
+            </button>
+            <button
+              (click)="setDateFilter('this-summer')"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.dateFilter === 'this-summer'"
+            >
+              Cet été
+            </button>
+            <button
+              (click)="setDateFilter('this-year')"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.dateFilter === 'this-year'"
+            >
+              2026
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropdown Pays -->
+        <div class="relative">
+          <button
+            (click)="toggleDropdown('country')"
+            class="px-3 py-1.5 rounded-lg bg-fest-surface border border-white/10 text-xs font-medium hover:bg-fest-surface/80 transition-colors flex items-center gap-2"
+          >
+            <span class="text-fest-text/60">Pays:</span>
+            <span class="text-fest-orange">{{ activeFilters.country || 'Tous' }}</span>
+            <i
+              class="pi pi-chevron-down text-[10px] transition-transform"
+              [class.rotate-180]="activeDropdown === 'country'"
+            ></i>
+          </button>
+
+          <div
+            *ngIf="activeDropdown === 'country'"
+            class="absolute top-full left-0 mt-1 w-48 bg-fest-surface border border-white/10 rounded-lg shadow-xl z-50 py-1"
+          >
+            <button
+              (click)="setCountry(null)"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.country === null"
+            >
+              Tous les pays
+            </button>
+            <button
+              *ngFor="let country of availableCountries$ | async"
+              (click)="setCountry(country)"
+              class="w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors"
+              [class.text-fest-orange]="activeFilters.country === country"
+            >
+              {{ country }}
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- Map Container -->
     <div
-      class="flex-1 rounded-2xl overflow-hidden bg-fest-surface border border-fest-border-subtle relative"
+      class="flex-1 rounded-2xl overflow-hidden bg-fest-surface border border-fest-border-subtle relative z-0"
     >
       <div id="festivalMap" data-testid="festival-map" class="h-full w-full"></div>
     </div>

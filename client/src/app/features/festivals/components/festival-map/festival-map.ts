@@ -8,13 +8,15 @@ import type {
 import { Festival } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
-import { FestivalService } from '../../services/festival-service';
+import { DateFilter, FestivalService } from '../../services/festival-service';
 import { FestivalSelection } from '../../services/festival-selection';
+import { CommonModule } from '@angular/common';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-festival-map',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './festival-map.html',
   styleUrl: './festival-map.scss',
 })
@@ -31,6 +33,22 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
   private markersGroup!: LeafletFeatureGroup;
   private markersById = new Map<number, LeafletMarker>();
 
+  activeDropdown: 'genre' | 'date' | 'country' | null = null;
+
+  readonly filters$ = this.festivalService.getFilters$();
+
+  readonly availableGenres$: Observable<string[]> = this.festivalService
+    .getAll$()
+    .pipe(
+      map((festivals) =>
+        [...new Set(festivals.map((f) => f.genre).filter((g): g is string => !!g))].sort(),
+      ),
+    );
+
+  readonly availableCountries$: Observable<string[]> = this.festivalService
+    .getAll$()
+    .pipe(map((festivals) => [...new Set(festivals.map((f) => f.address.country))].sort()));
+
   private static leafletPromise?: Promise<typeof import('leaflet')>;
 
   private async loadLeaflet(): Promise<typeof import('leaflet')> {
@@ -42,6 +60,25 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     void this.bootstrap();
+  }
+
+  toggleDropdown(dropdown: 'genre' | 'date' | 'country'): void {
+    this.activeDropdown = this.activeDropdown === dropdown ? null : dropdown;
+  }
+
+  setGenre(genre: string | null): void {
+    this.festivalService.setGenre(genre);
+    this.activeDropdown = null;
+  }
+
+  setCountry(country: string | null): void {
+    this.festivalService.setCountry(country);
+    this.activeDropdown = null;
+  }
+
+  setDateFilter(filter: DateFilter): void {
+    this.festivalService.setDateFilter(filter);
+    this.activeDropdown = null;
   }
 
   private async bootstrap(): Promise<void> {
