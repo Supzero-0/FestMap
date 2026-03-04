@@ -4,39 +4,10 @@
 >
   <app-sidebar></app-sidebar>
 
-  <app-festival-sidebar (selectFestival)="onSelectFestival($event)"></app-festival-sidebar>
+  <app-festival-sidebar></app-festival-sidebar>
 
-  <!-- Colonne 3 : Map + filtres -->
-  <section class="flex flex-col p-4 gap-4 bg-fest-bg">
-    <!-- Filtres -->
-    <header class="flex flex-wrap items-center gap-2 justify-between">
-      <h1 class="font-heading text-xl text-fest-orange">Carte des festivals</h1>
-      <div class="flex flex-wrap gap-2 text-xs">
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Tous les genres
-        </button>
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Ce mois-ci
-        </button>
-        <button
-          class="px-3 py-1 rounded-full bg-fest-violet-neon font-medium hover:bg-fest-magenta transition-colors"
-        >
-          Budget &lt; 100€
-        </button>
-      </div>
-    </header>
+  <app-festival-map></app-festival-map>
 
-    <!-- Map -->
-    <div
-      class="flex-1 rounded-2xl overflow-hidden bg-fest-surface border border-fest-border-subtle"
-    >
-      <app-festival-map #festivalMap></app-festival-map>
-    </div>
-  </section>
   <p-toast />
   <app-auth-modal></app-auth-modal>
 </main>

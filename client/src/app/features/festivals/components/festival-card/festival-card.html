@@ -1,5 +1,6 @@
 <div
   class="bg-fest-surface rounded-lg shadow-md overflow-hidden flex flex-col cursor-pointer hover:shadow-lg transition-shadow duration-300 ease-in-out"
+  [ngClass]="{ 'bg-fest-violet-neon': isSelected }"
   [attr.data-testid]="'festival-card-' + festival.id"
   (click)="onSelect($event)"
 >
@@ -25,6 +26,7 @@
 
   <div
     class="border-t border-fest-border-subtle p-3 flex justify-between items-center bg-fest-surface"
+    [ngClass]="{ 'bg-fest-violet-neon': isSelected }"
   >
     <div class="flex gap-2">
       <button

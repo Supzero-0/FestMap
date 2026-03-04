@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthModalComponent } from './features/auth/components/auth-modal/auth-modal';
@@ -15,11 +15,5 @@ import { FestivalSidebar } from './features/festivals/components/festival-sideba
   providers: [MessageService],
 })
 export class App {
-  @ViewChild(FestivalMap) festivalMap!: FestivalMap;
-
   constructor() {}
-
-  onSelectFestival(id: number): void {
-    this.festivalMap.focusMarker(id);
-  }
 }

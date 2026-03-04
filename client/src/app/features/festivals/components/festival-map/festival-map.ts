@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, OnDestroy, NgZone } from '@angular/core';
 import type {
   Map as LeafletMap,
   Marker as LeafletMarker,
@@ -8,11 +8,15 @@ import type {
 import { Festival } from '../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
-import { FestivalService } from '../../services/festival-service';
+import { DateFilter, FestivalService } from '../../services/festival-service';
+import { FestivalSelection } from '../../services/festival-selection';
+import { CommonModule } from '@angular/common';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-festival-map',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './festival-map.html',
   styleUrl: './festival-map.scss',
 })
@@ -20,12 +24,30 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
   private readonly festivalService = inject(FestivalService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly messageService = inject(MessageService);
+  private readonly festivalSelection = inject(FestivalSelection);
+  private readonly ngZone = inject(NgZone);
 
   private L!: typeof import('leaflet');
 
   private map!: LeafletMap;
   private markersGroup!: LeafletFeatureGroup;
   private markersById = new Map<number, LeafletMarker>();
+
+  activeDropdown: 'genre' | 'date' | 'country' | null = null;
+
+  readonly filters$ = this.festivalService.getFilters$();
+
+  readonly availableGenres$: Observable<string[]> = this.festivalService
+    .getAll$()
+    .pipe(
+      map((festivals) =>
+        [...new Set(festivals.map((f) => f.genre).filter((g): g is string => !!g))].sort(),
+      ),
+    );
+
+  readonly availableCountries$: Observable<string[]> = this.festivalService
+    .getAll$()
+    .pipe(map((festivals) => [...new Set(festivals.map((f) => f.address.country))].sort()));
 
   private static leafletPromise?: Promise<typeof import('leaflet')>;
 
@@ -40,6 +62,25 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     void this.bootstrap();
   }
 
+  toggleDropdown(dropdown: 'genre' | 'date' | 'country'): void {
+    this.activeDropdown = this.activeDropdown === dropdown ? null : dropdown;
+  }
+
+  setGenre(genre: string | null): void {
+    this.festivalService.setGenre(genre);
+    this.activeDropdown = null;
+  }
+
+  setCountry(country: string | null): void {
+    this.festivalService.setCountry(country);
+    this.activeDropdown = null;
+  }
+
+  setDateFilter(filter: DateFilter): void {
+    this.festivalService.setDateFilter(filter);
+    this.activeDropdown = null;
+  }
+
   private async bootstrap(): Promise<void> {
     try {
       this.L = await this.loadLeaflet();
@@ -47,12 +88,14 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
       this.initMap();
 
       this.festivalService
-        .getAll$()
+        .getFiltered$()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (festivals) => this.renderMarkers(festivals),
+          next: (festivals) => {
+            this.renderMarkers(festivals);
+          },
           error: (err) => {
-            console.error('[FestivalMap] getAll$ error:', err);
+            console.error('[FestivalMap] getFiltered$ error:', err);
             this.messageService.add({
               severity: 'error',
               summary: 'Erreur',
@@ -60,6 +103,8 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
             });
           },
         });
+
+      this.subscribeToSelection();
 
       setTimeout(() => this.map.invalidateSize(), 0);
     } catch (e) {
@@ -70,6 +115,18 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         detail: "Impossible d'initialiser la carte.",
       });
     }
+  }
+
+  private subscribeToSelection(): void {
+    this.festivalSelection.selectedFestivalId$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((id) => {
+        if (id !== null) {
+          this.focusMarker(id);
+        } else {
+          this.map.closePopup();
+        }
+      });
   }
 
   private initMap(): void {
@@ -177,6 +234,12 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
         icon: customIcon,
       }).bindPopup(popup);
 
+      marker.on('click', () => {
+        this.ngZone.run(() => {
+          this.festivalSelection.selectFestival(f.id);
+        });
+      });
+
       popup.on('add', () => {
         const closeButton = popup.getElement()?.querySelector(`#customCloseButton-${f.id}`);
         if (closeButton) {
@@ -185,6 +248,14 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
             this.map.closePopup();
           });
         }
+      });
+
+      popup.on('remove', () => {
+        this.ngZone.run(() => {
+          if (this.festivalSelection.selectedFestivalId === f.id) {
+            this.festivalSelection.selectFestival(null);
+          }
+        });
       });
 
       this.markersGroup.addLayer(marker);
@@ -204,8 +275,18 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
     const ll = marker.getLatLng();
     this.map.stop();
     const targetZoom = Math.max(this.map.getZoom(), 9);
-    this.map.flyTo(ll, targetZoom, { animate: true, duration: 0.4, easeLinearity: 0.25 });
-    marker.openPopup();
+
+    // Zoom to marker
+    this.map.flyTo(ll, targetZoom, {
+      animate: true,
+      duration: 0.4,
+      easeLinearity: 0.25,
+    });
+
+    // Only open popup if not already open
+    if (!marker.isPopupOpen()) {
+      marker.openPopup();
+    }
   }
 
   ngOnDestroy(): void {

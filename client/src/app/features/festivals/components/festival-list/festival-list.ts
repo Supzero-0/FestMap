@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+  OnInit,
+  ChangeDetectorRef,
+  DestroyRef,
+} from '@angular/core';
 import { Festival } from '../../types';
-import { catchError, map, of, startWith } from 'rxjs';
+import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { FestivalService } from '../../services/festival-service';
 import { FestivalCard } from '../festival-card/festival-card';
-
-type Vm = {
-  data: Festival[];
-  loading: boolean;
-  error: string | null;
-};
+import { FestivalSelection } from '../../services/festival-selection';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-festival-list',
@@ -19,28 +23,96 @@ type Vm = {
   templateUrl: './festival-list.html',
   styleUrl: './festival-list.scss',
 })
-export class FestivalList {
+export class FestivalList implements OnInit {
   private readonly festivalService = inject(FestivalService);
+  private readonly festivalSelection = inject(FestivalSelection);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Output() selectFestival = new EventEmitter<number>();
 
-  readonly vm$ = this.festivalService.getAll$().pipe(
-    map((data) => ({ data, loading: false, error: null }) as Vm),
-    startWith({ data: [], loading: true, error: null } as Vm),
-    catchError((err) => {
-      console.error(err);
-      return of({ data: [], loading: false, error: 'Impossible de charger les festivals.' } as Vm);
-    }),
-  );
+  festivals: Festival[] = [];
+  originalFestivalsOrder: Festival[] = [];
+  selectedFestivalId: number | null = null;
+  loading = true;
+  error: string | null = null;
+
+  ngOnInit(): void {
+    this.loading = true;
+    this.error = null;
+
+    this.festivalService
+      .getFiltered$()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map((data) => {
+          this.originalFestivalsOrder = [...data];
+          return data;
+        }),
+        catchError((err) => {
+          console.error(err);
+          this.error = 'Impossible de charger les festivals.';
+          this.loading = false;
+          this.cdr.detectChanges();
+          return of([] as Festival[]);
+        }),
+      )
+      .subscribe((data) => {
+        this.festivals = data;
+        this.reorderFestivals();
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+
+    this.festivalSelection.selectedFestivalId$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((id) => {
+        this.selectedFestivalId = id;
+        this.reorderFestivals();
+        this.cdr.detectChanges();
+      });
+  }
+
+  reorderFestivals(): void {
+    if (this.selectedFestivalId === null) {
+      this.festivals = [...this.originalFestivalsOrder];
+      return;
+    }
+
+    const selected = this.originalFestivalsOrder.find((f) => f.id === this.selectedFestivalId);
+    if (selected) {
+      const otherFestivals = this.originalFestivalsOrder.filter(
+        (f) => f.id !== this.selectedFestivalId,
+      );
+      this.festivals = [selected, ...otherFestivals];
+    }
+  }
 
   trackById = (_: number, f: Festival) => f.id;
 
   onSelect(id: number) {
     this.selectFestival.emit(id);
+    this.festivalSelection.selectFestival(id);
   }
 
   onDelete(id: number) {
-    this.festivalService.delete$(id).subscribe();
+    this.loading = true;
+    this.error = null;
+
+    this.festivalService
+      .delete$(id)
+      .pipe(
+        switchMap(() => this.festivalService.getAll$()),
+        catchError((err) => {
+          console.error(err);
+          this.error = 'Impossible de supprimer le festival.';
+          return of(this.festivals);
+        }),
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
+      .subscribe();
   }
 
   onToggleFavorite(id: number) {
