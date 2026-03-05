@@ -6,6 +6,7 @@
         label="Ajouter un festival"
         icon="pi pi-plus"
         styleClass="p-button-fest-magenta"
+        (onClick)="showDialog()"
       ></p-button>
     </header>
 
@@ -21,7 +22,10 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-festival>
-          <tr class="border-t border-white/5 hover:bg-white/5 transition-colors">
+          <tr
+            (click)="showDialog(festival, true)"
+            class="border-t border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
+          >
             <td class="text-fest-text font-medium">{{ festival.name }}</td>
             <td class="text-fest-text/80">{{ festival.genre }}</td>
             <td class="text-fest-text/80">
@@ -34,7 +38,14 @@
             <td>
               <div class="flex gap-2">
                 <button
-                  (click)="deleteFestival(festival.id)"
+                  (click)="showDialog(festival, false); $event.stopPropagation()"
+                  class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                  title="Modifier"
+                >
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button
+                  (click)="deleteFestival($event, festival.id)"
                   class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                   title="Supprimer"
                 >
@@ -53,3 +64,31 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de création/édition/consultation -->
+<p-dialog
+  [(visible)]="displayDialog"
+  [header]="
+    isReadOnly
+      ? 'Détails du festival'
+      : selectedFestival
+        ? 'Modifier le festival'
+        : 'Nouveau festival'
+  "
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="festmap-dialog"
+  (onHide)="hideDialog()"
+>
+  <app-festival-form
+    [festival]="selectedFestival"
+    [readOnly]="isReadOnly"
+    (save)="saveFestival($event)"
+    (cancel)="hideDialog()"
+  ></app-festival-form>
+</p-dialog>
+
+<p-toast></p-toast>
