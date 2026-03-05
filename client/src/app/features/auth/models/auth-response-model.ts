@@ -1,4 +1,7 @@
+import { Role } from './user-model';
+
 export interface AuthResponse {
   token: string;
-  expiresIn: number;
+  email: string;
+  role: Role;
 }
