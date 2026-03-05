@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
   DestroyRef,
 } from '@angular/core';
-import { Festival } from '../../types';
+import { Festival } from '../../models/festival-model';
 import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { FestivalService } from '../../services/festival-service';

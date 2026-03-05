@@ -1,4 +1,6 @@
-<aside class="border-r border-fest-border-subtle flex flex-col justify-between p-4 h-full">
+<aside
+  class="border-r border-fest-border-subtle flex flex-col justify-between p-4 h-full bg-fest-surface"
+>
   <div>
     <div class="mb-8">
       <span class="block font-heading text-xl text-fest-orange tracking-wide"> FestMap </span>
@@ -7,18 +9,40 @@
 
     <nav class="space-y-2 text-sm">
       <button
-        class="w-full text-left px-3 py-2 rounded-lg bg-fest-violet-neon text-fest-text hover:bg-fest-magenta transition-colors"
+        (click)="setMainView('map')"
+        class="w-full text-left px-3 py-2 rounded-lg transition-colors"
+        [class.bg-fest-violet-neon]="currentView() === 'map'"
+        [class.text-fest-text]="currentView() === 'map'"
+        [class.bg-transparent]="currentView() !== 'map'"
+        [class.hover:bg-fest-surface-lighter]="currentView() !== 'map'"
       >
+        <i class="pi pi-home mr-2"></i>
         Accueil
       </button>
+
+      <button
+        *ngIf="isAdmin()"
+        (click)="setMainView('admin')"
+        class="w-full text-left px-3 py-2 rounded-lg transition-colors"
+        [class.bg-fest-violet-neon]="currentView() === 'admin'"
+        [class.text-fest-text]="currentView() === 'admin'"
+        [class.bg-transparent]="currentView() !== 'admin'"
+        [class.hover:bg-fest-surface-lighter]="currentView() !== 'admin'"
+      >
+        <i class="pi pi-shield mr-2"></i>
+        Dashboard Admin
+      </button>
+
       <button
         class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
       >
+        <i class="pi pi-heart mr-2"></i>
         Favoris
       </button>
       <button
         class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
       >
+        <i class="pi pi-calendar mr-2"></i>
         Calendrier
       </button>
     </nav>
@@ -33,23 +57,27 @@
       <ng-template pTemplate="content">
         <div class="flex items-center gap-2 w-full">
           <div
-            class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"
-          ></div>
+            class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40 grid place-items-center"
+          >
+            <i class="pi pi-user text-xs"></i>
+          </div>
           <span class="flex-grow text-sm text-left">Se connecter</span>
         </div>
       </ng-template>
     </p-button>
 
     <ng-template #loggedInContent>
-      <p-button (onClick)="logout()" styleClass="w-full p-button-danger">
+      <p-button (onClick)="logout()" styleClass="w-full p-button-danger p-button-text">
         <ng-template pTemplate="content">
           <div class="flex items-center gap-2 w-full">
             <div
-              class="h-8 w-8 rounded-full bg-fest-violet-neon/40 border border-fest-magenta/40"
-            ></div>
+              class="h-8 w-8 rounded-full bg-fest-magenta/40 border border-fest-magenta/60 grid place-items-center"
+            >
+              <i class="pi pi-user text-xs"></i>
+            </div>
             <div class="flex flex-col flex-grow text-left">
-              <span class="text-sm">{{ getUserEmail() }}</span>
-              <span class="text-xs opacity-70">Se déconnecter</span>
+              <span class="text-sm truncate max-w-[140px]">{{ getUserEmail() }}</span>
+              <span class="text-[10px] opacity-70">Se déconnecter</span>
             </div>
           </div>
         </ng-template>

@@ -5,7 +5,7 @@ import type {
   FeatureGroup as LeafletFeatureGroup,
 } from 'leaflet';
 
-import { Festival } from '../../types';
+import { Festival } from '../../models/festival-model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { DateFilter, FestivalService } from '../../services/festival-service';
@@ -51,9 +51,9 @@ export class FestivalMap implements AfterViewInit, OnDestroy {
 
   private static leafletPromise?: Promise<typeof import('leaflet')>;
 
-  private async loadLeaflet(): Promise<typeof import('leaflet')> {
+  private async loadLeaflet(): Promise<any> {
     if (!FestivalMap.leafletPromise) {
-      FestivalMap.leafletPromise = import('leaflet');
+      FestivalMap.leafletPromise = import('leaflet').then((m) => (m as any).default || m);
     }
     return FestivalMap.leafletPromise;
   }
