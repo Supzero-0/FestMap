@@ -1,0 +1,182 @@
+<form [formGroup]="festivalForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 p-1">
+  <!-- Festival Info Section -->
+  <section class="flex flex-col gap-4">
+    <h3 class="text-lg font-semibold text-fest-orange mb-2">Informations du Festival</h3>
+
+    <div class="flex flex-col gap-2">
+      <label for="name" class="text-fest-text/60 text-sm">Nom du festival</label>
+      <input
+        pInputText
+        id="name"
+        formControlName="name"
+        placeholder="Ex: Hellfest"
+        class="w-full bg-fest-bg border-white/10 text-fest-text"
+      />
+      <small
+        *ngIf="festivalForm.get('name')?.invalid && festivalForm.get('name')?.touched"
+        class="text-red-400"
+      >
+        Le nom est requis (min. 3 caractères).
+      </small>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="genre" class="text-fest-text/60 text-sm">Genre musical</label>
+        <input
+          pInputText
+          id="genre"
+          formControlName="genre"
+          placeholder="Ex: Metal"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="startDate" class="text-fest-text/60 text-sm">Début</label>
+          <p-datepicker
+            id="startDate"
+            formControlName="startDate"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [fluid]="true"
+            appendTo="body"
+            styleClass="w-full"
+            inputStyleClass="w-full bg-fest-bg border-white/10 text-fest-text"
+          ></p-datepicker>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="endDate" class="text-fest-text/60 text-sm">Fin</label>
+          <p-datepicker
+            id="endDate"
+            formControlName="endDate"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [fluid]="true"
+            appendTo="body"
+            styleClass="w-full"
+            inputStyleClass="w-full bg-fest-bg border-white/10 text-fest-text"
+          ></p-datepicker>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="description" class="text-fest-text/60 text-sm">Description</label>
+      <textarea
+        pTextarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        placeholder="Décrivez le festival..."
+        class="w-full bg-fest-bg border-white/10 text-fest-text p-3 rounded-md outline-none focus:border-fest-magenta/50 transition-colors"
+      ></textarea>
+    </div>
+  </section>
+
+  <p-divider>
+    <span class="text-fest-text/40 text-xs uppercase tracking-widest">Adresse & Localisation</span>
+  </p-divider>
+
+  <!-- Address Section -->
+  <section formGroupName="address" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label for="addressLine" class="text-fest-text/60 text-sm">Rue / Lieu-dit</label>
+      <input
+        pInputText
+        id="addressLine"
+        formControlName="addressLine"
+        placeholder="Ex: 1 route de Clisson"
+        class="w-full bg-fest-bg border-white/10 text-fest-text"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="postalCode" class="text-fest-text/60 text-sm">Code Postal</label>
+        <input
+          pInputText
+          id="postalCode"
+          formControlName="postalCode"
+          placeholder="Ex: 44190"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="city" class="text-fest-text/60 text-sm">Ville</label>
+        <input
+          pInputText
+          id="city"
+          formControlName="city"
+          placeholder="Ex: Clisson"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="country" class="text-fest-text/60 text-sm">Pays</label>
+        <input
+          pInputText
+          id="country"
+          formControlName="country"
+          placeholder="Ex: France"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="latitude" class="text-fest-text/60 text-sm">Latitude</label>
+        <input
+          pInputText
+          type="number"
+          id="latitude"
+          formControlName="latitude"
+          placeholder="Ex: 47.08"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="longitude" class="text-fest-text/60 text-sm">Longitude</label>
+        <input
+          pInputText
+          type="number"
+          id="longitude"
+          formControlName="longitude"
+          placeholder="Ex: -1.27"
+          class="w-full bg-fest-bg border-white/10 text-fest-text"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <footer class="flex justify-end gap-3 mt-4 pt-4 border-t border-white/5">
+    <ng-container *ngIf="!readOnly; else readOnlyActions">
+      <p-button
+        label="Annuler"
+        icon="pi pi-times"
+        [text]="true"
+        styleClass="p-button-secondary"
+        (onClick)="onCancel()"
+        type="button"
+      ></p-button>
+      <p-button
+        [label]="festival ? 'Mettre à jour' : 'Créer le festival'"
+        icon="pi pi-check"
+        styleClass="p-button-fest-magenta"
+        type="submit"
+        [disabled]="festivalForm.invalid"
+      ></p-button>
+    </ng-container>
+    <ng-template #readOnlyActions>
+      <p-button
+        label="Fermer"
+        icon="pi pi-times"
+        styleClass="p-button-secondary"
+        (onClick)="onCancel()"
+        type="button"
+      ></p-button>
+    </ng-template>
+  </footer>
+</form>

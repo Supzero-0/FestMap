@@ -1,12 +1,19 @@
 <main
   data-testid="main-app-layout"
-  class="h-screen grid grid-cols-[260px_minmax(320px,1fr)_2fr] bg-fest-bg text-fest-text font-body"
+  class="h-screen grid grid-cols-[260px_minmax(320px,1fr)_2fr] bg-fest-bg text-fest-text font-body overflow-hidden"
 >
-  <app-sidebar></app-sidebar>
+  <app-sidebar class="h-full"></app-sidebar>
 
-  <app-festival-sidebar></app-festival-sidebar>
+  <ng-container *ngIf="currentView() === 'map'; else adminView">
+    <app-festival-sidebar class="h-full overflow-y-auto"></app-festival-sidebar>
+    <app-festival-map class="h-full"></app-festival-map>
+  </ng-container>
 
-  <app-festival-map></app-festival-map>
+  <ng-template #adminView>
+    <div class="col-span-2 overflow-auto">
+      <app-admin-page></app-admin-page>
+    </div>
+  </ng-template>
 
   <p-toast />
   <app-auth-modal></app-auth-modal>

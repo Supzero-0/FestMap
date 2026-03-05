@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Festival, FestivalRequest } from '../types';
+import { Festival, FestivalRequest } from '../models/festival-model';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, combineLatest, map, switchMap, tap, shareReplay } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -127,6 +127,12 @@ export class FestivalService {
   create$(festival: FestivalRequest): Observable<Festival> {
     return this.http
       .post<Festival>(this.baseUrl, festival)
+      .pipe(tap(() => this.refreshSubject.next()));
+  }
+
+  update$(id: number, festival: FestivalRequest): Observable<Festival> {
+    return this.http
+      .put<Festival>(`${this.baseUrl}/${id}`, festival)
       .pipe(tap(() => this.refreshSubject.next()));
   }
 

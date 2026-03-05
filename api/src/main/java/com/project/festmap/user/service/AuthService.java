@@ -38,7 +38,11 @@ public class AuthService {
     userRepository.save(user);
 
     String jwtToken = jwtService.generateToken(user);
-    return AuthResponse.builder().token(jwtToken).build();
+    return AuthResponse.builder()
+        .token(jwtToken)
+        .email(user.getEmail())
+        .role(user.getRole())
+        .build();
   }
 
   public AuthResponse login(LoginRequest request) {
@@ -54,6 +58,10 @@ public class AuthService {
                         "User not found after successful authentication. This should not happen."));
 
     String jwtToken = jwtService.generateToken(user);
-    return AuthResponse.builder().token(jwtToken).build();
+    return AuthResponse.builder()
+        .token(jwtToken)
+        .email(user.getEmail())
+        .role(user.getRole())
+        .build();
   }
 }

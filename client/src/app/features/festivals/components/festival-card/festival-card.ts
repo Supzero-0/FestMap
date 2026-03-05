@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Festival } from '../../types';
+import { Festival } from '../../models/festival-model';
 import { ButtonModule } from 'primeng/button';
 
 @Component({

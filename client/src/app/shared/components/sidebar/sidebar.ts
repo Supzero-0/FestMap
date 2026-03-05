@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../features/auth/services/auth-service';
 import { AuthModalService } from '../../../features/auth/services/auth-modal';
+import { ViewService } from '../../services/view-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,34 +12,35 @@ import { AuthModalService } from '../../../features/auth/services/auth-modal';
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss'],
 })
-export class SidebarComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private authModalService: AuthModalService,
-  ) {}
+export class SidebarComponent {
+  private readonly authService = inject(AuthService);
+  private readonly authModalService = inject(AuthModalService);
+  private readonly viewService = inject(ViewService);
 
-  ngOnInit(): void {}
+  readonly currentView = this.viewService.view;
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
 
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   getUserEmail(): string | null {
-    if (this.isAuthenticated()) {
-      return 'user@example.com';
-    }
-    return null;
+    return this.authService.getUserEmail();
   }
 
   logout(): void {
     this.authService.logout();
+    this.viewService.setView('map');
   }
 
   openLoginModal(): void {
-    this.authModalService.openModal(0); // 0 for login tab
+    this.authModalService.openModal(0);
   }
 
-  openRegisterModal(): void {
-    this.authModalService.openModal(1); // 1 for register tab
+  setMainView(view: 'map' | 'admin'): void {
+    this.viewService.setView(view);
   }
 }

@@ -1,0 +1,199 @@
+<div class="p-6 bg-fest-bg min-h-screen">
+  <div class="max-w-6xl mx-auto">
+    <header class="flex justify-between items-center mb-8">
+      <div class="flex flex-col gap-4">
+        <h1 class="text-3xl font-heading text-fest-orange">Administration</h1>
+        <p-selectButton
+          [options]="viewOptions"
+          [(ngModel)]="currentView"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="festmap-selectbutton"
+        >
+          <ng-template pTemplate="item" let-item>
+            <i [class]="item.icon" class="mr-2"></i>
+            <span>{{ item.label }}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
+
+      <p-button
+        [label]="currentView === 'festivals' ? 'Ajouter un festival' : 'Ajouter un utilisateur'"
+        icon="pi pi-plus"
+        styleClass="p-button-fest-magenta"
+        (onClick)="currentView === 'festivals' ? showFestivalDialog() : showUserDialog()"
+      ></p-button>
+    </header>
+
+    <!-- Vue Festivals -->
+    <div
+      *ngIf="currentView === 'festivals'"
+      class="bg-fest-surface rounded-xl border border-white/5 overflow-hidden shadow-xl"
+    >
+      <p-table [value]="(festivals$ | async) || []" [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Nom</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Genre</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Lieu</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Dates</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium w-32">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-festival>
+          <tr
+            (click)="showFestivalDialog(festival, true)"
+            class="border-t border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            <td class="text-fest-text font-medium">{{ festival.name }}</td>
+            <td class="text-fest-text/80">{{ festival.genre }}</td>
+            <td class="text-fest-text/80">
+              {{ festival.address.city }}, {{ festival.address.country }}
+            </td>
+            <td class="text-fest-text/80 text-sm">
+              {{ festival.startDate | date: 'dd/MM/yyyy' }} -
+              {{ festival.endDate | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <button
+                  (click)="showFestivalDialog(festival, false); $event.stopPropagation()"
+                  class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                  title="Modifier"
+                >
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button
+                  (click)="deleteFestival($event, festival.id)"
+                  class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                  title="Supprimer"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="p-8 text-center text-fest-text/40">Aucun festival trouvé.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Vue Utilisateurs -->
+    <div
+      *ngIf="currentView === 'users'"
+      class="bg-fest-surface rounded-xl border border-white/5 overflow-hidden shadow-xl"
+    >
+      <p-table [value]="(users$ | async) || []" [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Email</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium">Rôle</th>
+            <th class="bg-fest-surface text-fest-text/60 font-medium w-32">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr
+            (click)="showUserDialog(user, true)"
+            class="border-t border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            <td class="text-fest-text font-medium">{{ user.email }}</td>
+            <td>
+              <span
+                class="px-2 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="{
+                  'bg-fest-magenta/20 text-fest-magenta': user.role === 'ADMIN',
+                  'bg-blue-400/20 text-blue-400': user.role === 'USER',
+                }"
+              >
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <button
+                  (click)="showUserDialog(user, false); $event.stopPropagation()"
+                  class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                  title="Modifier"
+                >
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button
+                  (click)="deleteUser($event, user.id)"
+                  class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                  title="Supprimer"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" class="p-8 text-center text-fest-text/40">Aucun utilisateur trouvé.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Festivals -->
+<p-dialog
+  [(visible)]="displayFestivalDialog"
+  [header]="
+    isReadOnly
+      ? 'Détails du festival'
+      : selectedFestival?.id
+        ? 'Modifier le festival'
+        : 'Nouveau festival'
+  "
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="festmap-dialog"
+  (onHide)="hideDialog()"
+>
+  <app-festival-form
+    *ngIf="displayFestivalDialog"
+    [festival]="selectedFestival"
+    [readOnly]="isReadOnly"
+    (save)="saveFestival($event)"
+    (cancel)="hideDialog()"
+  ></app-festival-form>
+</p-dialog>
+
+<!-- Modal Utilisateurs -->
+<p-dialog
+  [(visible)]="displayUserDialog"
+  [header]="
+    isReadOnly
+      ? 'Détails de l\'utilisateur'
+      : selectedUser?.id
+        ? 'Modifier l\'utilisateur'
+        : 'Nouvel utilisateur'
+  "
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [breakpoints]="{ '640px': '90vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="festmap-dialog"
+  (onHide)="hideDialog()"
+>
+  <app-user-form
+    *ngIf="displayUserDialog"
+    [user]="selectedUser"
+    [readOnly]="isReadOnly"
+    (save)="saveUser($event)"
+    (cancel)="hideDialog()"
+  ></app-user-form>
+</p-dialog>
+
+<p-toast></p-toast>
