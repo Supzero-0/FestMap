@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,8 @@ public class FestivalService {
     FestivalResponse response = festivalMapper.toFestivalResponse(festival);
     User currentUser = userService.getCurrentUser();
     if (currentUser != null) {
-      response.setFavorite(currentUser.getFavoriteFestivals().contains(festival));
+      Set<Long> favoriteIds = userRepository.findFavoriteFestivalIdsByUserId(currentUser.getId());
+      response.setFavorite(favoriteIds.contains(festival.getId()));
     }
     return response;
   }
@@ -63,9 +65,7 @@ public class FestivalService {
     User currentUser = userService.getCurrentUser();
     Set<Long> favoriteIds =
         currentUser != null
-            ? currentUser.getFavoriteFestivals().stream()
-                .map(Festival::getId)
-                .collect(Collectors.toSet())
+            ? userRepository.findFavoriteFestivalIdsByUserId(currentUser.getId())
             : Set.of();
 
     return festivals.stream()
@@ -82,7 +82,7 @@ public class FestivalService {
   public boolean toggleFavorite(Long festivalId) {
     User user = userService.getCurrentUser();
     if (user == null) {
-      throw new IllegalStateException("User must be authenticated to favorite a festival.");
+      throw new BadCredentialsException("User must be authenticated to favorite a festival.");
     }
 
     Festival festival =

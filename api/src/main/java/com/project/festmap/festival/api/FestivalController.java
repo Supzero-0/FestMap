@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.festmap.festival.dto.FestivalRequest;
@@ -53,6 +54,7 @@ public class FestivalController {
     festivalService.deleteFestival(id);
   }
 
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/festivals/{id}/favorite")
   public ResponseEntity<Boolean> toggleFavorite(@PathVariable Long id) {
     boolean isFavorite = festivalService.toggleFavorite(id);

@@ -9,7 +9,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { Festival } from '../../models/festival-model';
-import { catchError, finalize, map, of, switchMap } from 'rxjs';
+import { catchError, finalize, map, of, switchMap, take } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { FestivalService } from '../../services/festival-service';
 import { FestivalCard } from '../festival-card/festival-card';
@@ -116,6 +116,6 @@ export class FestivalList implements OnInit {
   }
 
   onToggleFavorite(id: number) {
-    this.festivalService.toggleFavorite$(id).subscribe();
+    this.festivalService.toggleFavorite$(id).pipe(take(1)).subscribe();
   }
 }
