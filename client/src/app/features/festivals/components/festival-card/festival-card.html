@@ -30,12 +30,16 @@
   >
     <div class="flex gap-2">
       <button
-        class="p-button-text p-button-sm p-button-rounded text-fest-violet hover:text-fest-magenta"
+        *ngIf="isAuthenticated()"
+        class="p-button-text p-button-sm p-button-rounded transition-colors"
+        [ngClass]="
+          festival.favorite ? 'text-fest-orange' : 'text-fest-violet hover:text-fest-orange'
+        "
         (click)="onToggleFavorite($event)"
         [attr.data-testid]="'favorite-festival-button-' + festival.id"
-        title="Ajouter aux favoris"
+        [title]="festival.favorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
       >
-        <i class="pi pi-heart"></i>
+        <i class="pi" [ngClass]="festival.favorite ? 'pi-heart-fill' : 'pi-heart'"></i>
       </button>
       <a
         href="#"

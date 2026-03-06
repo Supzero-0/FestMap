@@ -34,11 +34,17 @@
       </button>
 
       <button
-        class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
+        (click)="setMainView('favorites')"
+        class="w-full text-left px-3 py-2 rounded-lg transition-colors"
+        [class.bg-fest-violet-neon]="currentView() === 'favorites'"
+        [class.text-fest-text]="currentView() === 'favorites'"
+        [class.bg-transparent]="currentView() !== 'favorites'"
+        [class.hover:bg-fest-surface-lighter]="currentView() !== 'favorites'"
       >
         <i class="pi pi-heart mr-2"></i>
         Favoris
       </button>
+
       <button
         class="w-full text-left px-3 py-2 rounded-lg bg-transparent hover:bg-fest-surface/60 transition-colors"
       >

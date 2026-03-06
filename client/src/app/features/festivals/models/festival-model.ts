@@ -16,6 +16,7 @@ export interface Festival {
   startDate: string;
   endDate: string;
   genre?: string;
+  favorite?: boolean;
 }
 
 export type FestivalRequest = Omit<Festival, 'id'>;

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../features/auth/services/auth-service';
 import { AuthModalService } from '../../../features/auth/services/auth-modal';
-import { ViewService } from '../../services/view-service';
+import { ViewService, MainView } from '../../services/view-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -40,7 +40,11 @@ export class SidebarComponent {
     this.authModalService.openModal(0);
   }
 
-  setMainView(view: 'map' | 'admin'): void {
+  setMainView(view: MainView): void {
+    if (view === 'favorites' && !this.isAuthenticated()) {
+      this.openLoginModal();
+      return;
+    }
     this.viewService.setView(view);
   }
 }

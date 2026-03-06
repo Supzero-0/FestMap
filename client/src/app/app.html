@@ -4,7 +4,7 @@
 >
   <app-sidebar class="h-full"></app-sidebar>
 
-  <ng-container *ngIf="currentView() === 'map'; else adminView">
+  <ng-container *ngIf="currentView() === 'map' || currentView() === 'favorites'; else adminView">
     <app-festival-sidebar class="h-full overflow-y-auto"></app-festival-sidebar>
     <app-festival-map class="h-full"></app-festival-map>
   </ng-container>

@@ -116,7 +116,6 @@ export class FestivalList implements OnInit {
   }
 
   onToggleFavorite(id: number) {
-    console.log(`Toggle favorite for festival with ID: ${id}`);
-    // Implement actual favorite toggling logic here
+    this.festivalService.toggleFavorite$(id).subscribe();
   }
 }

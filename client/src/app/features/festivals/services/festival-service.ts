@@ -16,6 +16,7 @@ export class FestivalService {
   private readonly genreSubject = new BehaviorSubject<string | null>(null);
   private readonly countrySubject = new BehaviorSubject<string | null>(null);
   private readonly dateFilterSubject = new BehaviorSubject<DateFilter>('all');
+  private readonly favoritesOnlySubject = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {}
 
@@ -33,9 +34,10 @@ export class FestivalService {
       this.genreSubject.asObservable(),
       this.countrySubject.asObservable(),
       this.dateFilterSubject.asObservable(),
+      this.favoritesOnlySubject.asObservable(),
     ]).pipe(
-      map(([festivals, search, genre, country, dateFilter]) =>
-        this.filterFestivals(festivals, search, genre, country, dateFilter),
+      map(([festivals, search, genre, country, dateFilter, favoritesOnly]) =>
+        this.filterFestivals(festivals, search, genre, country, dateFilter, favoritesOnly),
       ),
     );
   }
@@ -56,11 +58,20 @@ export class FestivalService {
     this.dateFilterSubject.next(filter);
   }
 
+  toggleFavoritesOnly(): void {
+    this.favoritesOnlySubject.next(!this.favoritesOnlySubject.value);
+  }
+
+  setFavoritesOnly(value: boolean): void {
+    this.favoritesOnlySubject.next(value);
+  }
+
   getFilters$() {
     return combineLatest({
       genre: this.genreSubject.asObservable(),
       country: this.countrySubject.asObservable(),
       dateFilter: this.dateFilterSubject.asObservable(),
+      favoritesOnly: this.favoritesOnlySubject.asObservable(),
     });
   }
 
@@ -70,8 +81,14 @@ export class FestivalService {
     genre: string | null,
     country: string | null,
     dateFilter: DateFilter,
+    favoritesOnly: boolean,
   ): Festival[] {
     let filtered = festivals;
+
+    // Favorites filter
+    if (favoritesOnly) {
+      filtered = filtered.filter((f) => f.favorite);
+    }
 
     // Search filter
     const s = search.toLowerCase().trim();
@@ -122,6 +139,12 @@ export class FestivalService {
     }
 
     return filtered;
+  }
+
+  toggleFavorite$(id: number): Observable<boolean> {
+    return this.http
+      .post<boolean>(`${this.baseUrl}/${id}/favorite`, {})
+      .pipe(tap(() => this.refreshSubject.next()));
   }
 
   create$(festival: FestivalRequest): Observable<Festival> {
