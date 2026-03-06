@@ -1,12 +1,16 @@
 package com.project.festmap.user.domain;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.project.festmap.festival.domain.Festival;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,6 +56,14 @@ public class User implements UserDetails {
   @Column(nullable = false)
   @Builder.Default
   private Role role = Role.USER;
+
+  @jakarta.persistence.ManyToMany
+  @jakarta.persistence.JoinTable(
+      name = "user_favorite_festival",
+      joinColumns = @jakarta.persistence.JoinColumn(name = "user_id"),
+      inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "festival_id"))
+  @Builder.Default
+  private Set<Festival> favoriteFestivals = new HashSet<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

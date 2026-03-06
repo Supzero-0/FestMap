@@ -52,4 +52,10 @@ public class FestivalController {
   public void deleteFestival(@PathVariable Long id) {
     festivalService.deleteFestival(id);
   }
+
+  @PostMapping("/festivals/{id}/favorite")
+  public ResponseEntity<Boolean> toggleFavorite(@PathVariable Long id) {
+    boolean isFavorite = festivalService.toggleFavorite(id);
+    return ResponseEntity.ok(isFavorite);
+  }
 }
