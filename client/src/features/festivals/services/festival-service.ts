@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Festival, FestivalRequest } from '../models/festival-model';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, combineLatest, map, switchMap, tap, shareReplay } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { environment } from './../../../environments/environment';
 
 export type DateFilter = 'all' | 'this-month' | 'this-summer' | 'this-year';
 

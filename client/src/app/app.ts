@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { AuthModalComponent } from './features/auth/components/auth-modal/auth-modal';
-import { SidebarComponent } from './shared/components/sidebar/sidebar';
-import { FestivalMap } from './features/festivals/components/festival-map/festival-map';
-import { FestivalSidebar } from './features/festivals/components/festival-sidebar/festival-sidebar';
-import { ViewService } from './shared/services/view-service';
-import { AdminPage } from './features/admin/admin-page/admin-page';
+import { AuthModalComponent } from '../features/auth/components/auth-modal/auth-modal';
+import { SidebarComponent } from '../shared/components/sidebar/sidebar';
+import { FestivalMap } from '../features/festivals/components/festival-map/festival-map';
+import { FestivalSidebar } from '../features/festivals/components/festival-sidebar/festival-sidebar';
+import { ViewService } from '../shared/services/view-service';
+import { AdminPage } from '../features/admin/admin-page/admin-page';
 
 @Component({
   selector: 'app-root',
