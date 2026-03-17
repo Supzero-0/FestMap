@@ -18,4 +18,5 @@ public class FestivalResponse {
   private LocalDate startDate;
   private LocalDate endDate;
   private String genre;
+  private boolean favorite;
 }

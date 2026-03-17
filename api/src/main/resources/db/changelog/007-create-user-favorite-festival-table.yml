@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007
+      author: supzero
+      changes:
+        - createTable:
+            tableName: user_favorite_festival
+            columns:
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_favorite_user
+                    referencedTableName: users
+                    referencedColumnNames: id
+              - column:
+                  name: festival_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_favorite_festival
+                    referencedTableName: festival
+                    referencedColumnNames: id

@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Festival } from '../../models/festival-model';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../../auth/services/auth-service';
 
 @Component({
   selector: 'app-festival-card',
@@ -11,11 +12,17 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './festival-card.scss',
 })
 export class FestivalCard {
+  private readonly authService = inject(AuthService);
+
   @Input({ required: true }) festival!: Festival;
   @Input() isSelected: boolean = false;
   @Output() selectFestival = new EventEmitter<number>();
   @Output() deleteFestival = new EventEmitter<number>();
   @Output() toggleFavorite = new EventEmitter<number>();
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
 
   onSelect(event: Event): void {
     event.stopPropagation();
