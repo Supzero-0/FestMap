@@ -29,6 +29,8 @@ import com.project.festmap.festival.dto.FestivalRequest;
 import com.project.festmap.festival.dto.FestivalResponse;
 import com.project.festmap.festival.mapper.FestivalMapper;
 import com.project.festmap.shared.exception.FestivalNotFoundException;
+import com.project.festmap.user.domain.UserRepository;
+import com.project.festmap.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("FestivalService Tests")
@@ -39,6 +41,10 @@ public class FestivalServiceTest {
   @Mock private FestivalMapper festivalMapper;
 
   @Mock private AddressService addressService;
+
+  @Mock private UserService userService;
+
+  @Mock private UserRepository userRepository;
 
   @InjectMocks private FestivalService festivalService;
 
